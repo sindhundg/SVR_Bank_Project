@@ -63,6 +63,13 @@ public class CustomerService implements ICustomerService {
         return true;
     }
 
+    @Override
+    public boolean deleteCustById(int custId) {
+
+       crepo.deleteById(custId);
+       return true;
+    }
+
     public Map<String,String> getJwtToken(String email){
         Map<String,String> tok=new HashMap<String,String>();
         String jwtToken= Jwts.builder().setSubject(email).setIssuedAt( new Date(0))

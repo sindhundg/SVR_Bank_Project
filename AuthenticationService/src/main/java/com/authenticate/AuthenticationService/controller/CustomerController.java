@@ -43,12 +43,23 @@ public class CustomerController {
     }
 
     @PutMapping("updateCustomerDetails/{customerId}")
-    public ResponseEntity<?> updateCustomerdDetails(@RequestBody Customer cust, @PathVariable int customerId) {
+    public ResponseEntity<?> updateCustomerDetails(@RequestBody Customer cust, @PathVariable int customerId) throws CustomerNotFound{
         try {
             custService.updateByCustId(cust, customerId);
-            return new ResponseEntity<>("Customer details updted", HttpStatus.OK);
+            return new ResponseEntity<>("Customer details updated", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @DeleteMapping("deleteCustomerDetails/{customerID}")
+    public ResponseEntity<?> deleteCustomerDetails(@PathVariable int customerID) throws CustomerNotFound {
+        try{
+            custService.deleteCustById(customerID);
+            return new ResponseEntity<>("Customer deleted successfully",HttpStatus.OK);
+
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
