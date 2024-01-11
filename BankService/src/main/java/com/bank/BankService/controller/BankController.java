@@ -21,27 +21,32 @@ public class BankController {
     public static double getRandomNumber() {
 
         Random rnd = new Random();
-        double number = rnd.nextDouble(99999999);
+        double number = rnd.nextLong(999999999)*2556489;
 
         return number;
     }
-    @PostMapping("createAccount/{accountHolderName}/{bankName}/{branchName}")
-    public ResponseEntity<?> createAccount(@PathVariable String accountHolderName,@PathVariable String bankName, @PathVariable String branchName,@RequestBody Account a) throws AccountAlreadyExists {
+    @PostMapping("createAccount/{bankName}/{branchName}")
+    public ResponseEntity<?> createAccount(@PathVariable String bankName, @PathVariable String branchName,@RequestBody Account account) throws AccountAlreadyExists {
        try {
            String IFSC = "";
            if(bankName.equals("SBI")){
                IFSC="SBI1234";
            } else if (bankName.equals("HDFC")) {
                IFSC="HDFC1234";
+           } else if (bankName.equals("AXIS")) {
+               IFSC="AXIS1234";
            }
            double accountNumber =  getRandomNumber();
-           a.setAccountNumber(accountNumber);
 
-           Bank b = new Bank(IFSC, bankName, branchName, a, accountHolderName);
-           b.setBankid(accountNumber);
-           b.setIFSC(IFSC);
+           Bank b = new Bank(IFSC,bankName,branchName);
+           account.setId(accountNumber+13);
+           account.setBank(b);
+           account.setAccountNumber(accountNumber);
+           account.setPin(account.getPin());
+           account.setBalance(account.getBalance());
 
-           bankService.createAccount(b);
+
+           bankService.createAccount(account);
            return new ResponseEntity<>(b, HttpStatus.CREATED);
        }
        catch (AccountAlreadyExists ae){
@@ -54,8 +59,11 @@ public class BankController {
     }
     @GetMapping("getAccounts/{accountHolderName}")
     public ResponseEntity<?> getAccounts(@PathVariable String accountHolderName){
-        List<Bank> customerAccounts= bankService.fetchAllCustomerAccounts(accountHolderName);
+        List<Account> customerAccounts= bankService.fetchAllCustomerAccounts(accountHolderName);
         return new ResponseEntity<>(customerAccounts,HttpStatus.OK);
 
     }
+
+
+
 }

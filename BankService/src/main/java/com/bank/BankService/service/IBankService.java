@@ -9,8 +9,8 @@ import com.bank.BankService.model.Bank;
 import java.util.List;
 
 public interface IBankService {
-    public Bank createAccount(Bank bank) throws AccountAlreadyExists;
-    public boolean deleteAccount(double accountNumber) throws AccountNotFound;
+    public Account createAccount(Account account) throws AccountAlreadyExists;
+    public boolean deleteAccountByPin(double accountNumber) throws AccountNotFound;
     public double showBalance(double accountNumber, int pin) throws InvalidPin;
-    public List<Bank> fetchAllCustomerAccounts(String accountHolderName);
+    public List<Account> fetchAllCustomerAccounts(String accountHolderName);
 }

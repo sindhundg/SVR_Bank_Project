@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BankRepo extends MongoRepository<Bank,String> {
-    public List<Bank> findByAccountHolderName(String accountHolderName);
+public interface AccountRepo extends MongoRepository<Account,Double> {
+    public List<Account> findByAccountHolderName(String accountHolderName);
+
 }
