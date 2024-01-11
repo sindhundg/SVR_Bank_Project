@@ -6,12 +6,11 @@ import com.bank.BankService.model.Bank;
 import com.bank.BankService.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Random;
 
 @RestController
@@ -19,15 +18,15 @@ import java.util.Random;
 public class BankController {
     @Autowired
     private BankService bankService;
-    public static BigInteger getRandomNumberString() {
+    public static double getRandomNumber() {
 
         Random rnd = new Random();
-        BigInteger number = new BigInteger(String.valueOf(rnd.nextInt(999999)));
+        double number = rnd.nextDouble(99999999);
 
         return number;
     }
-    @PostMapping("createAccount/{bankid}/{bankName}/{branchName}")
-    public ResponseEntity<?> createAccount(@PathVariable int bankid,@PathVariable String bankName, @PathVariable String branchName,@RequestBody Account a) throws AccountAlreadyExists {
+    @PostMapping("createAccount/{accountHolderName}/{bankName}/{branchName}")
+    public ResponseEntity<?> createAccount(@PathVariable String accountHolderName,@PathVariable String bankName, @PathVariable String branchName,@RequestBody Account a) throws AccountAlreadyExists {
        try {
            String IFSC = "";
            if(bankName.equals("SBI")){
@@ -35,10 +34,13 @@ public class BankController {
            } else if (bankName.equals("HDFC")) {
                IFSC="HDFC1234";
            }
-           BigInteger accountNumber =  getRandomNumberString();
+           double accountNumber =  getRandomNumber();
            a.setAccountNumber(accountNumber);
-           Bank b = new Bank(bankid,IFSC, bankName, branchName, a);
+
+           Bank b = new Bank(IFSC, bankName, branchName, a, accountHolderName);
+           b.setBankid(accountNumber);
            b.setIFSC(IFSC);
+
            bankService.createAccount(b);
            return new ResponseEntity<>(b, HttpStatus.CREATED);
        }
@@ -48,6 +50,12 @@ public class BankController {
        catch (Exception e){
            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
        }
+
+    }
+    @GetMapping("getAccounts/{accountHolderName}")
+    public ResponseEntity<?> getAccounts(@PathVariable String accountHolderName){
+        List<Bank> customerAccounts= bankService.fetchAllCustomerAccounts(accountHolderName);
+        return new ResponseEntity<>(customerAccounts,HttpStatus.OK);
 
     }
 }

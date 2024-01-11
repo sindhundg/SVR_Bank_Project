@@ -10,28 +10,30 @@ import jakarta.persistence.GenerationType;
 public class Bank {
     @Id
 //    @GeneratedValue(strategy=GenerationType.AUTO)
-    private int bankid;
+    private double bankid;
     private String IFSC;
     private String bankName;
     private String branchName;
     private Account account;
+    private String accountHolderName;
 
     public Bank() {
     }
 
-    public Bank(int bankid, String IFSC, String bankName, String branchName, Account account) {
-        this.bankid = bankid;
+    public Bank( String IFSC, String bankName, String branchName, Account account,String accountHolderName) {
+
         this.IFSC = IFSC;
         this.bankName = bankName;
         this.branchName = branchName;
         this.account = account;
+        this.accountHolderName=accountHolderName;
     }
 
-    public int getBankid() {
+    public double getBankid() {
         return bankid;
     }
 
-    public void setBankid(int bankid) {
+    public void setBankid(double bankid) {
         this.bankid = bankid;
     }
 
@@ -67,6 +69,14 @@ public class Bank {
         this.account = account;
     }
 
+    public String getAccountHolderName() {
+        return accountHolderName;
+    }
+
+    public void setAccountHolderName(String accountHolderName) {
+        this.accountHolderName = accountHolderName;
+    }
+
     @Override
     public String toString() {
         return "Bank{" +
@@ -75,6 +85,7 @@ public class Bank {
                 ", bankName='" + bankName + '\'' +
                 ", branchName='" + branchName + '\'' +
                 ", account=" + account +
+                ", accountHolderName='" + accountHolderName + '\'' +
                 '}';
     }
 }
