@@ -1,32 +1,34 @@
 package com.bank.BankService.model;
 
+import java.math.BigInteger;
+
 public class Account {
-    private long accountNumber;
-    private long balance;
+    private BigInteger accountNumber;
+    private BigInteger balance;
     private int pin;
 
     public Account() {
     }
 
-    public Account(long accountNumber, long balance, int pin) {
+    public Account(BigInteger accountNumber, BigInteger balance, int pin) {
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.pin = pin;
     }
 
-    public long getAccountNumber() {
+    public BigInteger getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(long accountNumber) {
+    public void setAccountNumber(BigInteger accountNumber) {
         this.accountNumber = accountNumber;
     }
 
-    public long getBalance() {
+    public BigInteger getBalance() {
         return balance;
     }
 
-    public void setBalance(long balance) {
+    public void setBalance(BigInteger balance) {
         this.balance = balance;
     }
 
