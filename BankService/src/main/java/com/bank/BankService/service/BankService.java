@@ -72,9 +72,61 @@ public class BankService implements IBankService{
 
     @Override
     public boolean updateAccountDetails(long accountNumber, int pin, Account account) throws AccountNotFound {
-        return false;
+        Optional<Account> accObj = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
+        if(accObj.isEmpty())
+        {
+            throw new AccountNotFound("Account not found");
+        }
+        else {
+            Account existAcc = bankRepo.findByAccountNumberAndPin(accountNumber, pin);
+            existAcc.setEmail(account.getEmail());
+            existAcc.setPhoneNo(account.getPhoneNo());
+            existAcc.setPin(account.getPin());
+            bankRepo.save(existAcc);
+            return true;
+        }
     }
 
+    @Override
+    public boolean updateAccountEmail(long accountNumber, int pin, String email) throws AccountNotFound {
+        Optional<Account> accObj = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
+        if (accObj.isEmpty()) {
+            throw new AccountNotFound("Account not found");
+        } else {
+            Account existAcc = bankRepo.findByAccountNumberAndPin(accountNumber, pin);
+            existAcc.setEmail(email);
+            bankRepo.save(existAcc);
+            return true;
+        }
+    }
+
+    @Override
+    public boolean updateAccountPhoneNo(long accountNumber, int pin, long PhoneNo) throws AccountNotFound {
+            Optional<Account> accObj = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
+            if(accObj.isEmpty())
+            {
+                throw new AccountNotFound("Account not found");
+            }
+            else {
+                Account existAcc = bankRepo.findByAccountNumberAndPin(accountNumber, pin);
+                existAcc.setPhoneNo(PhoneNo);
+                bankRepo.save(existAcc);
+                return true;
+            }
+    }
+
+    @Override
+    public boolean updateAccountPin(long accountNumber, int pin, int newPin) throws AccountNotFound {
+        Optional<Account> accObj = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
+        if (accObj.isEmpty()) {
+            throw new AccountNotFound("Account not found");
+        } else {
+            Account existAcc = bankRepo.findByAccountNumberAndPin(accountNumber, pin);
+            existAcc.setPin(newPin);
+            bankRepo.save(existAcc);
+            return true;
+        }
+    }
 
 
 }

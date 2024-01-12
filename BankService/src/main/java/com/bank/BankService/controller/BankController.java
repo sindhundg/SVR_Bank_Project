@@ -110,5 +110,73 @@ public class BankController {
       }
 }
 
+    @PutMapping("updateAccount/{accountNumber}/{pin}")
+    public ResponseEntity<?> updateAccountDetails(@PathVariable long accountNumber, @PathVariable int pin, @RequestBody Account acc) throws AccountNotFound
+    {
+    try {
+        bankService.updateAccountDetails(accountNumber, pin, acc);
+        return new ResponseEntity<>("Account Details Updated Successfully", HttpStatus.OK);
+    }
+    catch(AccountNotFound ae)
+    {
+        throw new AccountNotFound("Account not found");
+    }
+    catch(Exception ex)
+    {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+
+    @PutMapping("updateAccountEmail/{accountNumber}/{pin}/{email}")
+    public ResponseEntity<?> updateAccountEmail(@PathVariable long accountNumber, @PathVariable int pin, @PathVariable String email) throws AccountNotFound {
+        try {
+
+            bankService.updateAccountEmail(accountNumber, pin, email);
+            return new ResponseEntity<>("Account Details Updated Successfully", HttpStatus.OK);
+        }
+        catch(AccountNotFound ae)
+        {
+            throw new AccountNotFound("Account not found");
+        }
+        catch(Exception ex)
+        {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("updateAccountPhoneNo/{accountNumber}/{pin}/{phoneNo}")
+    public ResponseEntity<?> updateAccountPhoneNo(@PathVariable long accountNumber, @PathVariable int pin, @PathVariable long phoneNo) throws AccountNotFound {
+        try {
+
+            bankService.updateAccountPhoneNo(accountNumber, pin, phoneNo);
+            return new ResponseEntity<>("Account Details Updated Successfully", HttpStatus.OK);
+        }
+        catch(AccountNotFound ae)
+        {
+            throw new AccountNotFound("Account not found");
+        }
+        catch(Exception ex)
+        {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PutMapping("updateAccountPin/{accountNumber}/{pin}/{newPin}")
+    public ResponseEntity<?> updateAccountPin(@PathVariable long accountNumber, @PathVariable int pin, @PathVariable int newPin) throws AccountNotFound {
+        try {
+
+            bankService.updateAccountPin(accountNumber, pin, newPin);
+            return new ResponseEntity<>("Account Details Updated Successfully", HttpStatus.OK);
+        }
+        catch(AccountNotFound ae)
+        {
+            throw new AccountNotFound("Account not found");
+        }
+        catch(Exception ex)
+        {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }
