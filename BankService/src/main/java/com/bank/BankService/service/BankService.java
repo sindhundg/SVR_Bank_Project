@@ -14,14 +14,14 @@ public class BankService implements IBankService{
 @Autowired
     private BankRepo bankRepo;
     @Override
-    public Bank createAccount(Bank bank) throws AccountAlreadyExists {
-        Optional<Bank> bopt = bankRepo.findById(bank.getIFSC());
-        if(bopt.isPresent()){
+    public Account createAccount(Account account) throws AccountAlreadyExists {
+        Optional<Account> accObj = bankRepo.findById(account.getAccountNumber());
+        if(accObj.isPresent()){
             throw new AccountAlreadyExists("Account already exists");
         }
         else {
-           Bank bank1= bankRepo.save(bank);
-            return bank1;
+           Account acc = bankRepo.save(account);
+            return acc;
         }
     }
 

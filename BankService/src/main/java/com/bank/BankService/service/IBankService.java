@@ -7,7 +7,7 @@ import com.bank.BankService.model.Account;
 import com.bank.BankService.model.Bank;
 
 public interface IBankService {
-    public Bank createAccount(Bank bank) throws AccountAlreadyExists;
+    public Account createAccount(Account account) throws AccountAlreadyExists;
     public boolean deleteAccount(long accountNumber) throws AccountNotFound;
     public long showBalance(long accountNumber, int pin) throws InvalidPin;
 }

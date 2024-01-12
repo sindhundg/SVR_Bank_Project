@@ -26,8 +26,8 @@ public class BankController {
 
         return number;
     }
-    @PostMapping("createAccount/{bankid}/{bankName}/{branchName}")
-    public ResponseEntity<?> createAccount(@PathVariable int bankid,@PathVariable String bankName, @PathVariable String branchName,@RequestBody Account a) throws AccountAlreadyExists {
+    @PostMapping("createAccount/{bankName}/{branchName}")
+    public ResponseEntity<?> createAccount(@PathVariable String bankName, @PathVariable String branchName,@RequestBody Account a) throws AccountAlreadyExists {
        try {
            String IFSC = "";
            if(bankName.equals("SBI")){
@@ -37,10 +37,10 @@ public class BankController {
            }
            BigInteger accountNumber =  getRandomNumberString();
            a.setAccountNumber(accountNumber);
-           Bank b = new Bank(bankid,IFSC, bankName, branchName, a);
-           b.setIFSC(IFSC);
-           bankService.createAccount(b);
-           return new ResponseEntity<>(b, HttpStatus.CREATED);
+           Bank b = new Bank(IFSC, bankName, branchName);
+           a.setBank(b);
+           Account acc = bankService.createAccount(a);
+           return new ResponseEntity<>(acc, HttpStatus.CREATED);
        }
        catch (AccountAlreadyExists ae){
            throw new AccountAlreadyExists("Account already exists");
