@@ -15,4 +15,9 @@ public interface IBankService {
     public Account fetchCustomerAccount(long accountNumber, int pin) throws AccountNotFound;
     public List<Account> fetchAllCustomerAccounts(String accountHolderName);
     public boolean updateAccountDetails(long accountNumber, int pin, Account account) throws  AccountNotFound;
+
+    public boolean updateAccountEmail(long accountNumber, int pin, String email) throws AccountNotFound;
+    public boolean updateAccountPhoneNo(long accountNumber, int pin, long PhoneNo) throws  AccountNotFound;
+
+    public boolean updateAccountPin(long accountNumber, int pin, int newPin) throws  AccountNotFound;
 }
