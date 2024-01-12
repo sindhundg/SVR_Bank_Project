@@ -8,4 +8,5 @@ public interface ICustomerService {
     public Customer register(Customer cust) throws CustomerAlreadyExists;
     public Map<String,String> login(String email, String password) throws CustomerNotFound;
     public boolean updateByCustId(Customer cust,int custid);
+    public boolean deleteCustById(int custId);
 }

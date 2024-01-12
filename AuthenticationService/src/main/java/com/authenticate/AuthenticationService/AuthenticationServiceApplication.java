@@ -17,7 +17,7 @@ public class AuthenticationServiceApplication {
 		public FilterRegistrationBean getFilter() {
 			FilterRegistrationBean frb = new FilterRegistrationBean();
 			frb.setFilter(new Filter());
-			frb.addUrlPatterns("/bank/updateCustomerDetails/*");
+			frb.addUrlPatterns("/bank/updateCustomerDetails/*","/bank/deleteCustomerDetails/*");
 			return frb;
 
 		}
