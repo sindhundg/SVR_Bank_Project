@@ -1,6 +1,7 @@
 package com.bank.BankService.controller;
 
 import com.bank.BankService.exceptions.AccountAlreadyExists;
+import com.bank.BankService.exceptions.AccountNotFound;
 import com.bank.BankService.model.Account;
 import com.bank.BankService.model.Bank;
 import com.bank.BankService.service.BankService;
@@ -9,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
+
 import java.util.List;
 import java.util.Random;
 
@@ -18,10 +19,10 @@ import java.util.Random;
 public class BankController {
     @Autowired
     private BankService bankService;
-    public static double getRandomNumber() {
+    public static long getRandomNumber() {
 
         Random rnd = new Random();
-        double number = rnd.nextLong(999999999)*2556489;
+        long number = rnd.nextLong(999999999)*2556489;
 
         return number;
     }
@@ -30,22 +31,25 @@ public class BankController {
        try {
            String IFSC = "";
            if(bankName.equals("SBI")){
-               IFSC="SBI1234";
+               IFSC="SBI1234"+branchName.toUpperCase();
            } else if (bankName.equals("HDFC")) {
-               IFSC="HDFC1234";
+               IFSC="HDFC1234"+branchName.toUpperCase();
            } else if (bankName.equals("AXIS")) {
-               IFSC="AXIS1234";
+               IFSC="AXIS1234"+branchName.toUpperCase();
            }
-           double accountNumber =  getRandomNumber();
-
+           else if (bankName.equals("ICICI")) {
+               IFSC="ICICI1234"+branchName.toUpperCase();
+           }
+           long accountNumber =  getRandomNumber();
+           long millis = System.currentTimeMillis() % 1000;
            Bank b = new Bank(IFSC,bankName,branchName);
-           account.setId(accountNumber+13);
+           account.setId(accountNumber+millis);
            account.setBank(b);
            account.setAccountNumber(accountNumber);
+           account.setEmail(account.getEmail());
+           account.setPhoneNo(account.getPhoneNo());
            account.setPin(account.getPin());
            account.setBalance(account.getBalance());
-
-
            bankService.createAccount(account);
            return new ResponseEntity<>(b, HttpStatus.CREATED);
        }
@@ -57,13 +61,27 @@ public class BankController {
        }
 
     }
+    @GetMapping("showBalance/{accountNumber}/{pin}")
+    public ResponseEntity<?> getBalance(@PathVariable long accountNumber, @PathVariable int pin) throws AccountNotFound {
+        double balance = bankService.showBalance(accountNumber,pin);
+        return new ResponseEntity<>(balance,HttpStatus.OK);
+    }
+    @GetMapping("getAccount/{accountNumber}/{pin}")
+    public ResponseEntity<?> fetchAccount(@PathVariable long accountNumber, @PathVariable int pin) throws AccountNotFound {
+        Account account = bankService.fetchCustomerAccount(accountNumber,pin);
+        return new ResponseEntity<>(account,HttpStatus.OK);
+    }
     @GetMapping("getAccounts/{accountHolderName}")
     public ResponseEntity<?> getAccounts(@PathVariable String accountHolderName){
         List<Account> customerAccounts= bankService.fetchAllCustomerAccounts(accountHolderName);
         return new ResponseEntity<>(customerAccounts,HttpStatus.OK);
 
     }
-
+@DeleteMapping("deleteAccount/{accountNumber}/{pin}")
+    public ResponseEntity<?> deleteAccountByAccountNumber(@PathVariable long accountNumber, @PathVariable int pin) throws AccountNotFound {
+        bankService.deleteAccount(accountNumber,pin);
+        return new ResponseEntity<>("Account deleted Successfully",HttpStatus.OK);
+}
 
 
 }

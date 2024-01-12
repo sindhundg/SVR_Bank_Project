@@ -1,7 +1,5 @@
 package com.bank.BankService.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,9 +7,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Account {
     @Id
-    private double id;
-    private double accountNumber;
+    private long id;
+    private long accountNumber;
     private String accountHolderName;
+    private String email;
+    private long phoneNo;
     private double balance;
     private int pin;
     private Bank bank;
@@ -20,28 +20,30 @@ public class Account {
     public Account() {
     }
 
-    public Account(double id,double accountNumber, String accountHolderName, double balance, int pin, Bank bank) {
-        this.id=id;
+    public Account(long id, long accountNumber, String accountHolderName, String email, long phoneNo, double balance, int pin, Bank bank) {
+        this.id = id;
         this.accountNumber = accountNumber;
         this.accountHolderName = accountHolderName;
+        this.email = email;
+        this.phoneNo = phoneNo;
         this.balance = balance;
         this.pin = pin;
         this.bank = bank;
     }
 
-    public double getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(double id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public double getAccountNumber() {
+    public long getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(double accountNumber) {
+    public void setAccountNumber(long accountNumber) {
         this.accountNumber = accountNumber;
     }
 
@@ -51,6 +53,22 @@ public class Account {
 
     public void setAccountHolderName(String accountHolderName) {
         this.accountHolderName = accountHolderName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public long getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(long phoneNo) {
+        this.phoneNo = phoneNo;
     }
 
     public double getBalance() {
@@ -80,8 +98,11 @@ public class Account {
     @Override
     public String toString() {
         return "Account{" +
-                "accountNumber=" + accountNumber +
+                "id=" + id +
+                ", accountNumber=" + accountNumber +
                 ", accountHolderName='" + accountHolderName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNo=" + phoneNo +
                 ", balance=" + balance +
                 ", pin=" + pin +
                 ", bank=" + bank +
