@@ -11,6 +11,7 @@ public interface AccountRepo extends MongoRepository<Account,Double> {
     public List<Account> findByAccountHolderName(String accountHolderName);
     public Account findByAccountNumber(long accountNumber);
     public Account findByAccountNumberAndPin(long accountNumber, int pin);
+    public long deleteByAccountNumberAndPin(long accountNumber, int pin);
 
 
 
