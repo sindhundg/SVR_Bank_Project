@@ -2,8 +2,13 @@ package com.bank.BankService.service;
 
 import com.bank.BankService.exceptions.AccountAlreadyExists;
 import com.bank.BankService.exceptions.AccountNotFound;
+import com.bank.BankService.model.Bank;
+import com.bank.BankService.rabbitmqconfiguration.DataFormat;
 import com.bank.BankService.model.Account;
 import com.bank.BankService.repository.AccountRepo;
+import org.json.simple.JSONObject;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +17,12 @@ import java.util.Optional;
 
 @Service
 public class BankService implements IBankService{
-@Autowired
+    @Autowired
     private AccountRepo bankRepo;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private DirectExchange directExchange;
     @Override
     public Account createAccount(Account account) throws AccountAlreadyExists {
          Optional<Account> bopt= bankRepo.findById((double) account.getId());
@@ -65,9 +74,12 @@ public class BankService implements IBankService{
 
 
     @Override
-    public List<Account> fetchAllCustomerAccounts(String accountHolderName) {
+    public List<Account> fetchAllCustomerAccounts(String accountHolderName) throws AccountNotFound {
     List<Account> lacc = bankRepo.findByAccountHolderName(accountHolderName);
-    return lacc;
+        if(lacc.isEmpty()){
+            throw new AccountNotFound("No account found");
+        }
+        return bankRepo.findByAccountHolderName(accountHolderName);
     }
 
     @Override
@@ -126,6 +138,38 @@ public class BankService implements IBankService{
             bankRepo.save(existAcc);
             return true;
         }
+    }
+
+    @Override
+    public boolean sendAmount(long accountNumber, int pin, double amount,Account reciverAccount) throws AccountNotFound {
+        Optional<Account> accObj = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
+        Optional<Account> recvaccount = Optional.ofNullable(bankRepo.findByAccountNumber(reciverAccount.getAccountNumber()));
+        if (accObj.isEmpty())
+        {
+            throw new AccountNotFound("Account not found");
+        } else if (recvaccount.isEmpty()) {
+            throw new AccountNotFound("Receiver account not fount");
+        }
+        else {
+            Account  senderAccount = bankRepo.findByAccountNumber(accountNumber);
+            Account receiverAccount = bankRepo.findByAccountNumber(reciverAccount.getAccountNumber());
+            senderAccount.setBalance(senderAccount.getBalance()-amount);
+            receiverAccount.setBalance(receiverAccount.getBalance()+amount);
+            bankRepo.save(receiverAccount);
+            bankRepo.save(senderAccount);
+            return true;
+        }
+    }
+    public void sendTransactionData(double amount)
+    {
+
+        DataFormat df=new DataFormat();
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("Amount",amount);
+
+        df.setJsonObject(jsonObject);
+        rabbitTemplate.convertAndSend(directExchange.getName(),"transactionKey",df);
+
     }
 
 

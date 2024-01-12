@@ -13,11 +13,12 @@ public interface IBankService {
     public boolean deleteAccount(long accountNumber, int pin) throws AccountNotFound;
     public double showBalance(long accountNumber, int pin) throws InvalidPin, AccountNotFound;
     public Account fetchCustomerAccount(long accountNumber, int pin) throws AccountNotFound;
-    public List<Account> fetchAllCustomerAccounts(String accountHolderName);
+    public List<Account> fetchAllCustomerAccounts(String accountHolderName) throws AccountNotFound;
     public boolean updateAccountDetails(long accountNumber, int pin, Account account) throws  AccountNotFound;
 
     public boolean updateAccountEmail(long accountNumber, int pin, String email) throws AccountNotFound;
     public boolean updateAccountPhoneNo(long accountNumber, int pin, long PhoneNo) throws  AccountNotFound;
 
     public boolean updateAccountPin(long accountNumber, int pin, int newPin) throws  AccountNotFound;
+    public boolean sendAmount(long accountNumber, int pin, double amount,Account reciverAccount) throws AccountNotFound;
 }

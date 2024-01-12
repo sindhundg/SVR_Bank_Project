@@ -91,9 +91,9 @@ public class BankController {
           List<Account> customerAccounts = bankService.fetchAllCustomerAccounts(accountHolderName);
           return new ResponseEntity<>(customerAccounts, HttpStatus.OK);
       }
-//      catch (AccountNotFound ane){
-//          throw  new AccountNotFound("Account does not exist");
-//      }
+      catch (AccountNotFound ane){
+          throw  new AccountNotFound("Account does not exist");
+      }
       catch (Exception e){
         return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
       }
@@ -175,6 +175,24 @@ public class BankController {
         catch(Exception ex)
         {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PutMapping("transaction/{accountNumber}/{pin}/{amount}/{senderIfsc}/{receiverIfsc}")
+    public ResponseEntity<?> makeTransaction(@PathVariable long accountNumber,@PathVariable int pin, @PathVariable double amount,@PathVariable String senderIfsc,@PathVariable String receiverIfsc, @RequestBody Account receiverAccount) throws AccountNotFound {
+        try
+        {
+            bankService.sendAmount(accountNumber,pin,amount,receiverAccount);
+            Bank rb =receiverAccount.getBank();
+            bankService.sendTransactionData(amount);
+            return new ResponseEntity<>("Transaction successful",HttpStatus.OK);
+        }
+        catch (AccountNotFound ae)
+        {
+            throw new AccountNotFound("Account not found");
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
