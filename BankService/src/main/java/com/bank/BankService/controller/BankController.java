@@ -63,24 +63,51 @@ public class BankController {
     }
     @GetMapping("showBalance/{accountNumber}/{pin}")
     public ResponseEntity<?> getBalance(@PathVariable long accountNumber, @PathVariable int pin) throws AccountNotFound {
-        double balance = bankService.showBalance(accountNumber,pin);
-        return new ResponseEntity<>(balance,HttpStatus.OK);
+       try{
+           double balance = bankService.showBalance(accountNumber,pin);
+            return new ResponseEntity<>(balance,HttpStatus.OK);}
+       catch (AccountNotFound ane){
+           throw  new AccountNotFound("Account does not exist");
+       }
+       catch (Exception e){
+           return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+       }
     }
     @GetMapping("getAccount/{accountNumber}/{pin}")
     public ResponseEntity<?> fetchAccount(@PathVariable long accountNumber, @PathVariable int pin) throws AccountNotFound {
-        Account account = bankService.fetchCustomerAccount(accountNumber,pin);
-        return new ResponseEntity<>(account,HttpStatus.OK);
+       try{ Account account = bankService.fetchCustomerAccount(accountNumber,pin);
+        return new ResponseEntity<>(account,HttpStatus.OK);}
+
+       catch (AccountNotFound ane){
+           throw  new AccountNotFound("Account does not exist");
+       }
+       catch (Exception e){
+           return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+       }
     }
     @GetMapping("getAccounts/{accountHolderName}")
-    public ResponseEntity<?> getAccounts(@PathVariable String accountHolderName){
-        List<Account> customerAccounts= bankService.fetchAllCustomerAccounts(accountHolderName);
-        return new ResponseEntity<>(customerAccounts,HttpStatus.OK);
-
+    public ResponseEntity<?> getAccounts(@PathVariable String accountHolderName) throws AccountNotFound {
+      try {
+          List<Account> customerAccounts = bankService.fetchAllCustomerAccounts(accountHolderName);
+          return new ResponseEntity<>(customerAccounts, HttpStatus.OK);
+      }
+//      catch (AccountNotFound ane){
+//          throw  new AccountNotFound("Account does not exist");
+//      }
+      catch (Exception e){
+        return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
 @DeleteMapping("deleteAccount/{accountNumber}/{pin}")
     public ResponseEntity<?> deleteAccountByAccountNumber(@PathVariable long accountNumber, @PathVariable int pin) throws AccountNotFound {
-        bankService.deleteAccount(accountNumber,pin);
-        return new ResponseEntity<>("Account deleted Successfully",HttpStatus.OK);
+      try{  bankService.deleteAccount(accountNumber,pin);
+        return new ResponseEntity<>("Account deleted Successfully",HttpStatus.OK);}
+      catch (AccountNotFound ane){
+          throw  new AccountNotFound("Account does not exist");
+      }
+      catch (Exception e){
+          return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+      }
 }
 
 

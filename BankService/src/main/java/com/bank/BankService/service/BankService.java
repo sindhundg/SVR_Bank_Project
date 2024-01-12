@@ -33,8 +33,8 @@ public class BankService implements IBankService{
         {
             throw  new AccountNotFound("Account does not exist");
         }
-        Account account =dopt.get();
-        bankRepo.deleteById((double) account.getId());
+//        Account account =dopt.get();
+        bankRepo.deleteByAccountNumberAndPin(accountNumber, pin);
         return true;
     }
 
