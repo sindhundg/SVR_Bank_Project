@@ -1,13 +1,12 @@
 package com.bank.BankService.model;
 
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 public class Bank {
-//    @GeneratedValue(strategy=GenerationType.AUTO)
     private String IFSC;
     private String bankName;
     private String branchName;
+
+
 
     public Bank() {
     }
@@ -51,4 +50,3 @@ public class Bank {
                 '}';
     }
 }
-
