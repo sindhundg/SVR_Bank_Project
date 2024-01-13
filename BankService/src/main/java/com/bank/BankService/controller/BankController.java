@@ -2,7 +2,6 @@ package com.bank.BankService.controller;
 
 import com.bank.BankService.exceptions.AccountAlreadyExists;
 import com.bank.BankService.exceptions.AccountNotFound;
-import com.bank.BankService.exceptions.InsufficientBalance;
 import com.bank.BankService.model.Account;
 import com.bank.BankService.model.Bank;
 import com.bank.BankService.service.BankService;

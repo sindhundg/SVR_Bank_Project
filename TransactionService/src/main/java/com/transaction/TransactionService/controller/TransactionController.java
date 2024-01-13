@@ -44,5 +44,10 @@ public class TransactionController {
          return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
      }
     }
+    @GetMapping("getAllTransactions/{accountNumber}")
+    public ResponseEntity<?> getHistory(@PathVariable long accountNumber)
+    {  List<Transaction> t=  transactService.getTransactionHistory(accountNumber);
+        return new ResponseEntity<>(t,HttpStatus.OK);
+    }
 
 }

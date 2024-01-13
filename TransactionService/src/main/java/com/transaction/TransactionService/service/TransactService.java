@@ -10,8 +10,10 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.transaction.TransactionService.rabbitmqconfiguration.DataFormat;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Stream;
+
 
 @Service
 public class TransactService {
@@ -41,6 +43,18 @@ public List<Transaction> fetchDebitTransactions(long accountNumber) throws Trans
         }
         List<Transaction> tlist = (List<Transaction>) trepo.findByReceiverAccountNumber(accountNumber);
         return tlist;
+    }
+    public List<Transaction> getTransactionHistory(long accountNumber)
+    {
+        List<Transaction>  debitList = trepo.findBySenderAccountNumber(accountNumber);
+        List<Transaction> creditList = trepo.findByReceiverAccountNumber(accountNumber);
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.addAll(debitList);
+        transactions.addAll(creditList);
+        return  transactions;
+
+
+
     }
 
 }
