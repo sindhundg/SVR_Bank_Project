@@ -2,7 +2,9 @@ package com.bank.BankService.service;
 
 import com.bank.BankService.exceptions.AccountAlreadyExists;
 import com.bank.BankService.exceptions.AccountNotFound;
+import com.bank.BankService.exceptions.InsufficientBalance;
 import com.bank.BankService.model.Bank;
+import com.bank.BankService.model.Transaction;
 import com.bank.BankService.rabbitmqconfiguration.DataFormat;
 import com.bank.BankService.model.Account;
 import com.bank.BankService.repository.AccountRepo;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class BankService implements IBankService{
@@ -68,6 +71,18 @@ public class BankService implements IBankService{
         else
         {
             Account account = bankRepo.findByAccountNumberAndPin(accountNumber, pin);
+            return account;
+        }
+    }
+    @Override
+    public Account fetchAccount(long accountNumber) throws AccountNotFound {
+        Optional<Account> aopt = Optional.ofNullable(bankRepo.findByAccountNumber(accountNumber));
+        if(aopt.isEmpty()){
+            throw  new AccountNotFound("Account does not exist");
+        }
+        else
+        {
+            Account account = bankRepo.findByAccountNumber(accountNumber);
             return account;
         }
     }
@@ -141,16 +156,21 @@ public class BankService implements IBankService{
     }
 
     @Override
-    public boolean sendAmount(long accountNumber, int pin, double amount,Account reciverAccount) throws AccountNotFound {
+    public boolean sendAmount(long accountNumber, int pin, double amount,Account reciverAccount) throws AccountNotFound, InsufficientBalance {
         Optional<Account> accObj = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
         Optional<Account> recvaccount = Optional.ofNullable(bankRepo.findByAccountNumber(reciverAccount.getAccountNumber()));
+//
         if (accObj.isEmpty())
         {
-            throw new AccountNotFound("Account not found");
+            throw new AccountNotFound("Sender account not found");
         } else if (recvaccount.isEmpty()) {
-            throw new AccountNotFound("Receiver account not fount");
-        }
-        else {
+            throw new AccountNotFound("Receiver account not found");}
+
+        else if(accObj.get().getBalance()<=0.0){
+            throw  new InsufficientBalance("Insufficient Balance");
+        } else if (amount>accObj.get().getBalance()) {
+            throw  new InsufficientBalance("Insufficient Balance");
+        } else {
             Account  senderAccount = bankRepo.findByAccountNumber(accountNumber);
             Account receiverAccount = bankRepo.findByAccountNumber(reciverAccount.getAccountNumber());
             senderAccount.setBalance(senderAccount.getBalance()-amount);
@@ -160,12 +180,12 @@ public class BankService implements IBankService{
             return true;
         }
     }
-    public void sendTransactionData(double amount)
+    public void sendTransactionData(long senderAccountNumber,String senderIfsc,long receiverAccountNumber,String receiverIfsc, double amount)
     {
-
+        Transaction t = new Transaction(senderAccountNumber,senderIfsc,receiverAccountNumber,receiverIfsc,amount);
         DataFormat df=new DataFormat();
         JSONObject jsonObject=new JSONObject();
-        jsonObject.put("Amount",amount);
+        jsonObject.put("Transaction",t);
 
         df.setJsonObject(jsonObject);
         rabbitTemplate.convertAndSend(directExchange.getName(),"transactionKey",df);
