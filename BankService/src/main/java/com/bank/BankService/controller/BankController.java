@@ -187,7 +187,7 @@ public class BankController {
             Bank sb =senderAccount.getBank();
             Bank rb =recvAct.getBank();
 
-            bankService.sendTransactionData(accountNumber,sb.getIFSC(),receiverAccount.getAccountNumber(),rb.getIFSC(),amount);
+            bankService.sendTransactionData(senderAccount.getAccountHolderName(),accountNumber,sb.getIFSC(),recvAct.getAccountHolderName(),receiverAccount.getAccountNumber(),rb.getIFSC(),amount);
             return new ResponseEntity<>("Transaction successful",HttpStatus.OK);
         }
 

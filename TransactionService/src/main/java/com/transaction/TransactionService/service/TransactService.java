@@ -11,8 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.transaction.TransactionService.rabbitmqconfiguration.DataFormat;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Stream;
+
 
 
 @Service
@@ -44,17 +45,27 @@ public List<Transaction> fetchDebitTransactions(long accountNumber) throws Trans
         List<Transaction> tlist = (List<Transaction>) trepo.findByReceiverAccountNumber(accountNumber);
         return tlist;
     }
-    public List<Transaction> getTransactionHistory(long accountNumber)
-    {
+    public List<Transaction> getTransactionHistory(long accountNumber) throws TransactionNotFound {
         List<Transaction>  debitList = trepo.findBySenderAccountNumber(accountNumber);
-        List<Transaction> creditList = trepo.findByReceiverAccountNumber(accountNumber);
+        List<Transaction>  creditList = trepo.findByReceiverAccountNumber(accountNumber);
         List<Transaction> transactions = new ArrayList<>();
-        transactions.addAll(debitList);
         transactions.addAll(creditList);
+        transactions.addAll(debitList);
+        if (transactions.isEmpty()){
+            throw new TransactionNotFound("No transactions found");
+        }
+        return  transactions;
+    }
+    public List<Transaction> getAllAcctTransactionHistory(String name) throws TransactionNotFound {
+        List<Transaction>  debitList = trepo.findBySenderName(name);
+        List<Transaction>  creditList = trepo.findByReceiverName(name);
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.addAll(creditList);
+        transactions.addAll(debitList);
+        if (transactions.isEmpty()){
+            throw  new TransactionNotFound("No transactions found");
+        }
         return  transactions;
 
-
-
     }
-
 }

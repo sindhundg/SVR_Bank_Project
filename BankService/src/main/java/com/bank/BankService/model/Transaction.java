@@ -8,25 +8,34 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Transaction {
 
 
-
+    private String senderName;
     private long senderAccountNumber;
     private String senderBankIfsc;
+    private String receiverName;
     private long receiverAccountNumber;
     private String receiverBankIfsc;
-
-    //private String transactionType;
     private double transactionAmount;
 
 
     public Transaction() {
     }
 
-    public Transaction(long senderAccountNumber, String senderBankIfsc, long receiverAccountNumber, String receiverBankIfsc, double transactionAmount) {
+    public Transaction(String senderName, long senderAccountNumber, String senderBankIfsc, String receiverName, long receiverAccountNumber, String receiverBankIfsc, double transactionAmount) {
+        this.senderName = senderName;
         this.senderAccountNumber = senderAccountNumber;
         this.senderBankIfsc = senderBankIfsc;
+        this.receiverName = receiverName;
         this.receiverAccountNumber = receiverAccountNumber;
         this.receiverBankIfsc = receiverBankIfsc;
         this.transactionAmount = transactionAmount;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 
     public long getSenderAccountNumber() {
@@ -43,6 +52,14 @@ public class Transaction {
 
     public void setSenderBankIfsc(String senderBankIfsc) {
         this.senderBankIfsc = senderBankIfsc;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
     public long getReceiverAccountNumber() {
@@ -72,8 +89,10 @@ public class Transaction {
     @Override
     public String toString() {
         return "Transaction{" +
-                "senderAccountNumber=" + senderAccountNumber +
+                "senderName='" + senderName + '\'' +
+                ", senderAccountNumber=" + senderAccountNumber +
                 ", senderBankIfsc='" + senderBankIfsc + '\'' +
+                ", receiverName='" + receiverName + '\'' +
                 ", receiverAccountNumber=" + receiverAccountNumber +
                 ", receiverBankIfsc='" + receiverBankIfsc + '\'' +
                 ", transactionAmount=" + transactionAmount +

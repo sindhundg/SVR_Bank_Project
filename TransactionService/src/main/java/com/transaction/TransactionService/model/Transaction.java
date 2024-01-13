@@ -12,11 +12,13 @@ public class Transaction {
     @Id
     private long transactionId = 15+System.currentTimeMillis();
 
+    private String senderName;
     private long senderAccountNumber;
     private String senderBankIfsc;
+    private String receiverName;
     private long receiverAccountNumber;
     private String receiverBankIfsc;
-    //private String transactionType;
+
     private double transactionAmount;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date transactionDate = new Date();
@@ -26,10 +28,12 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(long transactionId, long senderAccountNumber, String senderBankIfsc, long receiverAccountNumber, String receiverBankIfsc, double transactionAmount, Date transactionDate) {
+    public Transaction(long transactionId, String senderName, long senderAccountNumber, String senderBankIfsc, String receiverName, long receiverAccountNumber, String receiverBankIfsc, double transactionAmount, Date transactionDate) {
         this.transactionId = transactionId;
+        this.senderName = senderName;
         this.senderAccountNumber = senderAccountNumber;
         this.senderBankIfsc = senderBankIfsc;
+        this.receiverName = receiverName;
         this.receiverAccountNumber = receiverAccountNumber;
         this.receiverBankIfsc = receiverBankIfsc;
         this.transactionAmount = transactionAmount;
@@ -42,6 +46,14 @@ public class Transaction {
 
     public void setTransactionId(long transactionId) {
         this.transactionId = transactionId;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 
     public long getSenderAccountNumber() {
@@ -58,6 +70,14 @@ public class Transaction {
 
     public void setSenderBankIfsc(String senderBankIfsc) {
         this.senderBankIfsc = senderBankIfsc;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
     public long getReceiverAccountNumber() {
@@ -96,8 +116,10 @@ public class Transaction {
     public String toString() {
         return "Transaction{" +
                 "transactionId=" + transactionId +
+                ", senderName='" + senderName + '\'' +
                 ", senderAccountNumber=" + senderAccountNumber +
                 ", senderBankIfsc='" + senderBankIfsc + '\'' +
+                ", receiverName='" + receiverName + '\'' +
                 ", receiverAccountNumber=" + receiverAccountNumber +
                 ", receiverBankIfsc='" + receiverBankIfsc + '\'' +
                 ", transactionAmount=" + transactionAmount +

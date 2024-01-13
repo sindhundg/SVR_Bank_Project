@@ -44,10 +44,14 @@ public class TransactionController {
          return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
      }
     }
-    @GetMapping("getAllTransactions/{accountNumber}")
-    public ResponseEntity<?> getHistory(@PathVariable long accountNumber)
-    {  List<Transaction> t=  transactService.getTransactionHistory(accountNumber);
+    @GetMapping("getAllTransactionsForAccount/{accountNumber}")
+    public ResponseEntity<?> getHistory(@PathVariable long accountNumber) throws TransactionNotFound {
+        List<Transaction> t=  transactService.getTransactionHistory(accountNumber);
         return new ResponseEntity<>(t,HttpStatus.OK);
     }
-
+    @GetMapping("transactionHistoryOfMultiAcct/{accountHolderName}")
+    public ResponseEntity<?> getAllAcctHistory(@PathVariable long accountHolderName) throws TransactionNotFound {
+        List<Transaction> t=  transactService.getTransactionHistory(accountHolderName);
+        return new ResponseEntity<>(t,HttpStatus.OK);
+    }
 }

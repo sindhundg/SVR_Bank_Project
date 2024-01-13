@@ -180,9 +180,9 @@ public class BankService implements IBankService{
             return true;
         }
     }
-    public void sendTransactionData(long senderAccountNumber,String senderIfsc,long receiverAccountNumber,String receiverIfsc, double amount)
+    public void sendTransactionData(String senderName, long senderAccountNumber,String senderIfsc,String receiverName,long receiverAccountNumber,String receiverIfsc, double amount)
     {
-        Transaction t = new Transaction(senderAccountNumber,senderIfsc,receiverAccountNumber,receiverIfsc,amount);
+        Transaction t = new Transaction(senderName,senderAccountNumber,senderIfsc,receiverName,receiverAccountNumber,receiverIfsc,amount);
         DataFormat df=new DataFormat();
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("Transaction",t);
