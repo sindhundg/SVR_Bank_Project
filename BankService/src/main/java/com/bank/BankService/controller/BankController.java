@@ -45,6 +45,7 @@ public class BankController {
            Bank b = new Bank(IFSC,bankName,branchName);
            account.setId(accountNumber+millis);
            account.setBank(b);
+           account.setAccountHolderName(account.getAccountHolderName().toUpperCase());
            account.setAccountNumber(accountNumber);
            account.setEmail(account.getEmail());
            account.setPhoneNo(account.getPhoneNo());
@@ -88,7 +89,7 @@ public class BankController {
     @GetMapping("getAccounts/{accountHolderName}")
     public ResponseEntity<?> getAccounts(@PathVariable String accountHolderName) throws AccountNotFound {
       try {
-          List<Account> customerAccounts = bankService.fetchAllCustomerAccounts(accountHolderName);
+          List<Account> customerAccounts = bankService.fetchAllCustomerAccounts(accountHolderName.toUpperCase());
           return new ResponseEntity<>(customerAccounts, HttpStatus.OK);
       }
       catch (AccountNotFound ane){

@@ -3,7 +3,7 @@ package com.bank.BankService.service;
 import com.bank.BankService.exceptions.AccountAlreadyExists;
 import com.bank.BankService.exceptions.AccountNotFound;
 import com.bank.BankService.exceptions.InsufficientBalance;
-import com.bank.BankService.model.Bank;
+import com.bank.BankService.exceptions.InvalidPin;
 import com.bank.BankService.model.Transaction;
 import com.bank.BankService.rabbitmqconfiguration.DataFormat;
 import com.bank.BankService.model.Account;
@@ -33,6 +33,7 @@ public class BankService implements IBankService{
             throw new AccountAlreadyExists("Account already exists");
         }
         else {
+
            Account bank1= bankRepo.save(account);
             return bank1;
         }
@@ -143,10 +144,14 @@ public class BankService implements IBankService{
     }
 
     @Override
-    public boolean updateAccountPin(long accountNumber, int pin, int newPin) throws AccountNotFound {
+    public boolean updateAccountPin(long accountNumber, int pin, int newPin) throws AccountNotFound, InvalidPin {
         Optional<Account> accObj = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
         if (accObj.isEmpty()) {
             throw new AccountNotFound("Account not found");
+        }
+        else if(accObj.get().getPin()==newPin){
+            throw new InvalidPin("New pin is same as old pin");
+
         } else {
             Account existAcc = bankRepo.findByAccountNumberAndPin(accountNumber, pin);
             existAcc.setPin(newPin);

@@ -24,9 +24,6 @@ public class TransactionController {
            List<Transaction> transactionList = transactService.fetchDebitTransactions(accountNumber);
            return new ResponseEntity<>(transactionList, HttpStatus.OK);
        }
-//       catch (TransactionNotFound te){
-//           throw  new TransactionNotFound("Transaction does not exist");
-//       }
        catch (Exception e)
        {
            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
@@ -44,14 +41,14 @@ public class TransactionController {
          return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
      }
     }
-    @GetMapping("getAllTransactionsForAccount/{accountNumber}")
+    @GetMapping("transactionHistoryForAccount/{accountNumber}")
     public ResponseEntity<?> getHistory(@PathVariable long accountNumber) throws TransactionNotFound {
         List<Transaction> t=  transactService.getTransactionHistory(accountNumber);
         return new ResponseEntity<>(t,HttpStatus.OK);
     }
-    @GetMapping("transactionHistoryOfMultiAcct/{accountHolderName}")
-    public ResponseEntity<?> getAllAcctHistory(@PathVariable long accountHolderName) throws TransactionNotFound {
-        List<Transaction> t=  transactService.getTransactionHistory(accountHolderName);
+    @GetMapping("transactionHistoryOfMultiAccounts/{accountHolderName}")
+    public ResponseEntity<?> getAllAcctHistory(@PathVariable String accountHolderName) throws TransactionNotFound {
+        List<Transaction> t=  transactService.getAllAcctTransactionHistory(accountHolderName.toUpperCase());
         return new ResponseEntity<>(t,HttpStatus.OK);
     }
 }

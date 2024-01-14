@@ -21,6 +21,6 @@ public interface IBankService {
     public boolean updateAccountEmail(long accountNumber, int pin, String email) throws AccountNotFound;
     public boolean updateAccountPhoneNo(long accountNumber, int pin, long PhoneNo) throws  AccountNotFound;
 
-    public boolean updateAccountPin(long accountNumber, int pin, int newPin) throws  AccountNotFound;
+    public boolean updateAccountPin(long accountNumber, int pin, int newPin) throws AccountNotFound, InvalidPin;
     public boolean sendAmount(long accountNumber, int pin, double amount,Account reciverAccount) throws AccountNotFound, InsufficientBalance;
 }
