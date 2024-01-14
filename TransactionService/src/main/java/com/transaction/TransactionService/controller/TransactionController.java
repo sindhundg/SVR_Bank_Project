@@ -4,6 +4,7 @@ import com.transaction.TransactionService.exceptions.TransactionNotFound;
 import com.transaction.TransactionService.model.Transaction;
 import com.transaction.TransactionService.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +19,10 @@ import java.util.List;
 public class TransactionController {
     @Autowired
     TransactionService transactionService;
-    @GetMapping("getDebitTransactionDetails/{accountNumber}")
-    public ResponseEntity<?> getAllDebitTransaction(@PathVariable long accountNumber) throws TransactionNotFound {
+    @GetMapping("getDebitTransactionDetails/{accountNumber}/{numberOfTransactions}")
+    public ResponseEntity<?> getAllDebitTransaction(@PathVariable long accountNumber,@PathVariable int numberOfTransactions) throws TransactionNotFound {
        try {
-           List<Transaction> transactionList = transactionService.fetchDebitTransactions(accountNumber);
+           List<Transaction> transactionList = transactionService.fetchDebitTransactions(accountNumber,numberOfTransactions);
 
            return new ResponseEntity<>(transactionList, HttpStatus.OK);
        }
@@ -30,11 +31,11 @@ public class TransactionController {
            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
        }
     }
-    @GetMapping("getCreditTransactionDetails/{accountNumber}")
-    public ResponseEntity<?> getAllCreditTransaction(@PathVariable long accountNumber) throws TransactionNotFound {
+    @GetMapping("getCreditTransactionDetails/{accountNumber}/{numberOfTransactions}")
+    public ResponseEntity<?> getAllCreditTransaction(@PathVariable long accountNumber,@PathVariable int numberOfTransactions ) throws TransactionNotFound {
      try
      {
-         List<Transaction> transactionList = transactionService.fetchCreditTransactions(accountNumber);
+         List<Transaction> transactionList = transactionService.fetchCreditTransactions(accountNumber, numberOfTransactions);
          return new ResponseEntity<>(transactionList, HttpStatus.OK);
      }
      catch (Exception e)
