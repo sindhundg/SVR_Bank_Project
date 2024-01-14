@@ -65,9 +65,15 @@ public class BankService implements IBankService{
 
 
     @Override
-    public List<Account> fetchAllCustomerAccounts(String accountHolderName) {
-    List<Account> lacc = bankRepo.findByAccountHolderName(accountHolderName);
-    return lacc;
+    public List<Account> fetchAllCustomerAccounts(String accountHolderName) throws AccountNotFound {
+    List<Account> lacc = bankRepo.findByAccountHolderName(accountHolderName) ;
+    if(lacc.isEmpty()){
+        throw new AccountNotFound("Account not found");
+    }
+    else{
+        return lacc;
+    }
+
     }
 
     @Override
