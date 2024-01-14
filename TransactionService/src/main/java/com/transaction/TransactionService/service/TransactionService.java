@@ -11,13 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.transaction.TransactionService.rabbitmqconfiguration.DataFormat;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
 
 @Service
-public class TransactService {
+public class TransactionService {
     @Autowired
     private TransactionRepo trepo;
     @RabbitListener(queues = "TransactionQueue")

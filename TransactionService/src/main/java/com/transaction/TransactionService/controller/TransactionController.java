@@ -2,7 +2,7 @@ package com.transaction.TransactionService.controller;
 
 import com.transaction.TransactionService.exceptions.TransactionNotFound;
 import com.transaction.TransactionService.model.Transaction;
-import com.transaction.TransactionService.service.TransactService;
+import com.transaction.TransactionService.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +17,11 @@ import java.util.List;
 @RequestMapping("transaction")
 public class TransactionController {
     @Autowired
-    TransactService transactService;
+    TransactionService transactionService;
     @GetMapping("getDebitTransactionDetails/{accountNumber}")
     public ResponseEntity<?> getAllDebitTransaction(@PathVariable long accountNumber) throws TransactionNotFound {
        try {
-           List<Transaction> transactionList = transactService.fetchDebitTransactions(accountNumber);
+           List<Transaction> transactionList = transactionService.fetchDebitTransactions(accountNumber);
            return new ResponseEntity<>(transactionList, HttpStatus.OK);
        }
        catch (Exception e)
@@ -33,7 +33,7 @@ public class TransactionController {
     public ResponseEntity<?> getAllCreditTransaction(@PathVariable long accountNumber) throws TransactionNotFound {
      try
      {
-         List<Transaction> transactionList = transactService.fetchCreditTransactions(accountNumber);
+         List<Transaction> transactionList = transactionService.fetchCreditTransactions(accountNumber);
          return new ResponseEntity<>(transactionList, HttpStatus.OK);
      }
      catch (Exception e)
@@ -43,12 +43,12 @@ public class TransactionController {
     }
     @GetMapping("transactionHistoryForAccount/{accountNumber}")
     public ResponseEntity<?> getHistory(@PathVariable long accountNumber) throws TransactionNotFound {
-        List<Transaction> t=  transactService.getTransactionHistory(accountNumber);
+        List<Transaction> t=  transactionService.getTransactionHistory(accountNumber);
         return new ResponseEntity<>(t,HttpStatus.OK);
     }
     @GetMapping("transactionHistoryOfMultiAccounts/{accountHolderName}")
     public ResponseEntity<?> getAllAcctHistory(@PathVariable String accountHolderName) throws TransactionNotFound {
-        List<Transaction> t=  transactService.getAllAcctTransactionHistory(accountHolderName.toUpperCase());
+        List<Transaction> t=  transactionService.getAllAcctTransactionHistory(accountHolderName.toUpperCase());
         return new ResponseEntity<>(t,HttpStatus.OK);
     }
 }

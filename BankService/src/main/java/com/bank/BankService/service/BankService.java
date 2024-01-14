@@ -1,9 +1,6 @@
 package com.bank.BankService.service;
 
-import com.bank.BankService.exceptions.AccountAlreadyExists;
-import com.bank.BankService.exceptions.AccountNotFound;
-import com.bank.BankService.exceptions.InsufficientBalance;
-import com.bank.BankService.exceptions.InvalidPin;
+import com.bank.BankService.exceptions.*;
 import com.bank.BankService.model.Transaction;
 import com.bank.BankService.rabbitmqconfiguration.DataFormat;
 import com.bank.BankService.model.Account;
@@ -16,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class BankService implements IBankService{
@@ -52,10 +48,10 @@ public class BankService implements IBankService{
     }
 
     @Override
-    public double showBalance(long accountNumber, int pin) throws AccountNotFound {
+    public double showBalance(long accountNumber, int pin) throws  InvalidAccountNumberOrPin {
         Optional<Account> aopt = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
         if (aopt.isEmpty()){
-            throw new AccountNotFound("Account does not exist");
+            throw new InvalidAccountNumberOrPin("Either account number or pin is invalid");
         }
         else {
             Account account = bankRepo.findByAccountNumberAndPin(accountNumber, pin);
@@ -64,10 +60,10 @@ public class BankService implements IBankService{
     }
 
     @Override
-    public Account fetchCustomerAccount(long accountNumber, int pin) throws AccountNotFound {
+    public Account fetchCustomerAccount(long accountNumber, int pin) throws AccountNotFound, InvalidAccountNumberOrPin {
         Optional<Account> aopt = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
         if(aopt.isEmpty()){
-            throw  new AccountNotFound("Account does not exist");
+            throw new InvalidAccountNumberOrPin("Either account number or pin is invalid");
         }
         else
         {
@@ -99,11 +95,11 @@ public class BankService implements IBankService{
     }
 
     @Override
-    public boolean updateAccountDetails(long accountNumber, int pin, Account account) throws AccountNotFound {
+    public boolean updateAccountDetails(long accountNumber, int pin, Account account) throws  InvalidAccountNumberOrPin {
         Optional<Account> accObj = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
         if(accObj.isEmpty())
         {
-            throw new AccountNotFound("Account not found");
+            throw new InvalidAccountNumberOrPin("Either account number or pin is invalid");
         }
         else {
             Account existAcc = bankRepo.findByAccountNumberAndPin(accountNumber, pin);
@@ -116,10 +112,10 @@ public class BankService implements IBankService{
     }
 
     @Override
-    public boolean updateAccountEmail(long accountNumber, int pin, String email) throws AccountNotFound {
+    public boolean updateAccountEmail(long accountNumber, int pin, String email) throws InvalidAccountNumberOrPin {
         Optional<Account> accObj = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
         if (accObj.isEmpty()) {
-            throw new AccountNotFound("Account not found");
+            throw new InvalidAccountNumberOrPin("Either account number or pin is invalid");
         } else {
             Account existAcc = bankRepo.findByAccountNumberAndPin(accountNumber, pin);
             existAcc.setEmail(email);
@@ -129,11 +125,11 @@ public class BankService implements IBankService{
     }
 
     @Override
-    public boolean updateAccountPhoneNo(long accountNumber, int pin, long PhoneNo) throws AccountNotFound {
+    public boolean updateAccountPhoneNo(long accountNumber, int pin, long PhoneNo) throws InvalidAccountNumberOrPin {
             Optional<Account> accObj = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
             if(accObj.isEmpty())
             {
-                throw new AccountNotFound("Account not found");
+                throw new InvalidAccountNumberOrPin("Either account number or pin is invalid");
             }
             else {
                 Account existAcc = bankRepo.findByAccountNumberAndPin(accountNumber, pin);
@@ -144,10 +140,10 @@ public class BankService implements IBankService{
     }
 
     @Override
-    public boolean updateAccountPin(long accountNumber, int pin, int newPin) throws AccountNotFound, InvalidPin {
+    public boolean updateAccountPin(long accountNumber, int pin, int newPin) throws  InvalidAccountNumberOrPin, InvalidPin {
         Optional<Account> accObj = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
         if (accObj.isEmpty()) {
-            throw new AccountNotFound("Account not found");
+            throw new InvalidAccountNumberOrPin("Either account number or pin is invalid");
         }
         else if(accObj.get().getPin()==newPin){
             throw new InvalidPin("New pin is same as old pin");
