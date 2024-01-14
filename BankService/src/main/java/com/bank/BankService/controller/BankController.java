@@ -93,7 +93,7 @@ public class BankController {
       }
 //      catch (AccountNotFound ane){
 //          throw  new AccountNotFound("Account does not exist");
-//     }
+//      }
       catch (Exception e){
         return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
       }

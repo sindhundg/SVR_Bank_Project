@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 @Entity
 public class Customer {
     @Id
-     private int customerid;
+    private int customerid;
     private int age;
     private String customerName;
     private String password;
