@@ -22,6 +22,7 @@ public class TransactionController {
     public ResponseEntity<?> getAllDebitTransaction(@PathVariable long accountNumber) throws TransactionNotFound {
        try {
            List<Transaction> transactionList = transactionService.fetchDebitTransactions(accountNumber);
+
            return new ResponseEntity<>(transactionList, HttpStatus.OK);
        }
        catch (Exception e)
