@@ -77,12 +77,12 @@ public class BankController {
        }
     }
     @GetMapping("getAccount/{accountNumber}/{pin}")
-    public ResponseEntity<?> fetchAccount(@PathVariable long accountNumber, @PathVariable int pin) throws AccountNotFound {
+    public ResponseEntity<?> fetchAccount(@PathVariable long accountNumber, @PathVariable int pin) throws InvalidAccountNumberOrPin {
        try{ Account account = bankService.fetchCustomerAccount(accountNumber,pin);
         return new ResponseEntity<>(account,HttpStatus.OK);}
 
-       catch (AccountNotFound ane){
-           throw  new AccountNotFound("Account does not exist");
+       catch (InvalidAccountNumberOrPin ane){
+           throw  new InvalidAccountNumberOrPin("Either account number or pin is invalid");
        }
        catch (Exception e){
            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
@@ -105,8 +105,8 @@ public class BankController {
     public ResponseEntity<?> deleteAccountByAccountNumber(@PathVariable long accountNumber, @PathVariable int pin) throws AccountNotFound {
       try{  bankService.deleteAccount(accountNumber,pin);
         return new ResponseEntity<>("Account deleted Successfully",HttpStatus.OK);}
-      catch (AccountNotFound ane){
-          throw  new AccountNotFound("Account does not exist");
+      catch (InvalidAccountNumberOrPin ane){
+          throw  new AccountNotFound("Either account number or pin is invalid");
       }
       catch (Exception e){
           return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
