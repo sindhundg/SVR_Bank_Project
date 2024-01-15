@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -40,4 +42,31 @@ public class AccountRepositoryTest {
         assertNotNull(account1);
         assertEquals(account.getAccountNumber(),account1.getAccountNumber());
     }
+
+    @Test
+    public void checkSuccessfulShowBalance(){
+        accountRepo.save(account);
+        Account acc1 = accountRepo.findByAccountNumberAndPin(account.getAccountNumber(), account.getPin());
+        assertEquals(account.getBalance(), acc1.getBalance());
+    }
+
+    @Test
+    public void checkSuccessfulDeletion()
+    {
+        accountRepo.save(account);
+        accountRepo.deleteByAccountNumberAndPin(account.getAccountNumber(), account.getPin());
+        Optional<Account> accobj = Optional.ofNullable(accountRepo.findByAccountNumberAndPin(account.getAccountNumber(), account.getPin()));
+        assertEquals(Optional.empty(), accobj);
+    }
+
+    @Test
+    public void checkFetchCustomerAccount()
+    {
+        accountRepo.save(account);
+        Account accobj = accountRepo.findByAccountNumberAndPin(account.getAccountNumber(), account.getPin());
+        assertEquals(account.getPin(), accobj.getPin());
+
+    }
+
+
 }

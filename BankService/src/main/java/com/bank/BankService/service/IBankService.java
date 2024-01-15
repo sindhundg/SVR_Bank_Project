@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface IBankService {
     public Account createAccount(Account account) throws AccountAlreadyExists;
-    public boolean deleteAccount(long accountNumber, int pin) throws AccountNotFound;
+    public boolean deleteAccount(long accountNumber, int pin) throws InvalidAccountNumberOrPin;
     public double showBalance(long accountNumber, int pin) throws InvalidAccountNumberOrPin;
-    public Account fetchCustomerAccount(long accountNumber, int pin) throws AccountNotFound, InvalidAccountNumberOrPin;
+    public Account fetchCustomerAccount(long accountNumber, int pin) throws InvalidAccountNumberOrPin;
     public Account fetchAccount(long accountNumber) throws AccountNotFound;
     public List<Account> fetchAllCustomerAccounts(String accountHolderName) throws AccountNotFound;
     public boolean updateAccountDetails(long accountNumber, int pin, Account account) throws  InvalidAccountNumberOrPin;

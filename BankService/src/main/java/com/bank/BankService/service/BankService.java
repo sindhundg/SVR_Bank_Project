@@ -36,11 +36,11 @@ public class BankService implements IBankService{
     }
 
     @Override
-    public boolean deleteAccount(long accountNumber, int pin) throws AccountNotFound {
-        Optional<Account> dopt = Optional.of(bankRepo.findByAccountNumberAndPin(accountNumber,pin));
+    public boolean deleteAccount(long accountNumber, int pin) throws InvalidAccountNumberOrPin {
+        Optional<Account> dopt = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber,pin));
         if(dopt.isEmpty())
         {
-            throw  new AccountNotFound("Account does not exist");
+            throw  new InvalidAccountNumberOrPin("Either account number or pin is invalid");
         }
 //        Account account =dopt.get();
         bankRepo.deleteByAccountNumberAndPin(accountNumber, pin);
@@ -60,7 +60,7 @@ public class BankService implements IBankService{
     }
 
     @Override
-    public Account fetchCustomerAccount(long accountNumber, int pin) throws AccountNotFound, InvalidAccountNumberOrPin {
+    public Account fetchCustomerAccount(long accountNumber, int pin) throws InvalidAccountNumberOrPin {
         Optional<Account> aopt = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
         if(aopt.isEmpty()){
             throw new InvalidAccountNumberOrPin("Either account number or pin is invalid");
