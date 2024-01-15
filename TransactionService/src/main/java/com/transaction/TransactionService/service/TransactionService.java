@@ -18,6 +18,7 @@ import com.transaction.TransactionService.rabbitmqconfiguration.DataFormat;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -91,6 +92,8 @@ public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int num
         List<Transaction> transactions = new ArrayList<>();
         transactions.addAll(debitList);
         transactions.addAll(creditList);
+        Collections.sort(transactions,(t1,t2)->t1.getTransactionDate().compareTo(t2.getTransactionDate()));
+        Collections.reverse(transactions);
         if (transactions.isEmpty()){
             throw new TransactionNotFound("No transactions found");
         }
@@ -102,6 +105,8 @@ public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int num
         List<Transaction> transactions = new ArrayList<>();
         transactions.addAll(creditList);
         transactions.addAll(debitList);
+        Collections.sort(transactions,(t1,t2)->t1.getTransactionDate().compareTo(t2.getTransactionDate()));
+        Collections.reverse(transactions);
         if (transactions.isEmpty()){
             throw  new TransactionNotFound("No transactions found");
         }
