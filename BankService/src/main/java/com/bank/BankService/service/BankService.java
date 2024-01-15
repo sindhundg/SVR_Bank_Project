@@ -157,14 +157,18 @@ public class BankService implements IBankService{
     }
 
     @Override
-    public boolean sendAmount(long accountNumber, int pin, double amount,Account reciverAccount) throws AccountNotFound, InsufficientBalance {
+    public boolean sendAmount(long accountNumber, int pin, double amount,Account reciverAccount) throws AccountNotFound, InsufficientBalance, TransactionNotAllowed {
         Optional<Account> accObj = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
         Optional<Account> recvaccount = Optional.ofNullable(bankRepo.findByAccountNumber(reciverAccount.getAccountNumber()));
 //
         if (accObj.isEmpty())
         {
             throw new AccountNotFound("Sender account not found");
-        } else if (recvaccount.isEmpty()) {
+        }
+        else if(recvaccount.get().getAccountNumber() == accountNumber){
+            throw  new TransactionNotAllowed("Transaction not allowed");
+        }
+        else if (recvaccount.isEmpty()) {
             throw new AccountNotFound("Receiver account not found");}
 
         else if(accObj.get().getBalance()<=0.0){
