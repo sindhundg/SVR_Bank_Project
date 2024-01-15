@@ -42,10 +42,6 @@ public class TransactionService {
         System.out.println(df.getJsonObject().toJSONString());
     }
 public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int numberOfTransactions) throws TransactionNotFound {
-    List<Transaction> topt = trepo.findBySenderAccountNumber(accountNumber);
-    if (topt.isEmpty()){
-        throw  new TransactionNotFound("No debit transactions found");
-    }
         Query query = new Query();
         query.addCriteria(where("senderAccountNumber").is(accountNumber)).limit(numberOfTransactions);
         query.with(Sort.by(Sort.Direction.DESC,"transactionDate"));
@@ -68,10 +64,7 @@ public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int num
 
 }
     public List<ReceiverTransaction> fetchCreditTransactions(long accountNumber, int numberOfTransactions) throws TransactionNotFound{
-        List<Transaction> topt = trepo.findByReceiverAccountNumber(accountNumber);
-        if (topt.isEmpty()){
-            throw  new TransactionNotFound("No credit transactions found");
-        }
+
         Query query = new Query();
         query.addCriteria(where("receiverAccountNumber").is(accountNumber)).limit(numberOfTransactions);
         query.with(Sort.by(Sort.Direction.DESC,"transactionDate"));
