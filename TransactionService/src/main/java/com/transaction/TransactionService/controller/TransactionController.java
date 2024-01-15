@@ -1,10 +1,11 @@
 package com.transaction.TransactionService.controller;
 
 import com.transaction.TransactionService.exceptions.TransactionNotFound;
+import com.transaction.TransactionService.model.ReceiverTransaction;
+import com.transaction.TransactionService.model.SenderTransaction;
 import com.transaction.TransactionService.model.Transaction;
 import com.transaction.TransactionService.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,7 @@ public class TransactionController {
     @GetMapping("getDebitTransactionDetails/{accountNumber}/{numberOfTransactions}")
     public ResponseEntity<?> getAllDebitTransaction(@PathVariable long accountNumber,@PathVariable int numberOfTransactions) throws TransactionNotFound {
        try {
-           List<Transaction> transactionList = transactionService.fetchDebitTransactions(accountNumber,numberOfTransactions);
-
+           List<SenderTransaction> transactionList = transactionService.fetchDebitTransactions(accountNumber,numberOfTransactions);
            return new ResponseEntity<>(transactionList, HttpStatus.OK);
        }
        catch (Exception e)
@@ -35,7 +35,7 @@ public class TransactionController {
     public ResponseEntity<?> getAllCreditTransaction(@PathVariable long accountNumber,@PathVariable int numberOfTransactions ) throws TransactionNotFound {
      try
      {
-         List<Transaction> transactionList = transactionService.fetchCreditTransactions(accountNumber, numberOfTransactions);
+         List<ReceiverTransaction> transactionList = transactionService.fetchCreditTransactions(accountNumber, numberOfTransactions);
          return new ResponseEntity<>(transactionList, HttpStatus.OK);
      }
      catch (Exception e)

@@ -10,7 +10,7 @@ import java.util.Date;
 @Document
 public class Transaction {
     @Id
-    private long transactionId = 15+System.currentTimeMillis();
+    private long transactionId = System.currentTimeMillis();
 
     private String senderName;
     private long senderAccountNumber;
@@ -20,12 +20,19 @@ public class Transaction {
     private String receiverBankIfsc;
 
     private double transactionAmount;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date transactionDate = new Date();
 
 
 
     public Transaction() {
+    }
+    public Transaction(long transactionId,  String senderName, long senderAccountNumber, double transactionAmount, Date transactionDate){
+        this.transactionId = transactionId;
+        this.senderName = senderName;
+        this.senderAccountNumber = senderAccountNumber;
+        this.transactionAmount = transactionAmount;
+        this.transactionDate = transactionDate;
     }
 
     public Transaction(long transactionId, String senderName, long senderAccountNumber, String senderBankIfsc, String receiverName, long receiverAccountNumber, String receiverBankIfsc, double transactionAmount, Date transactionDate) {
