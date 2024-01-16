@@ -6,8 +6,6 @@ import com.transaction.TransactionService.model.SenderTransaction;
 import com.transaction.TransactionService.model.Transaction;
 import com.transaction.TransactionService.repository.TransactionRepo;
 
-
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,21 +22,19 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionService {
     @Autowired
-    private TransactionRepo trepo;
-    @Autowired
-    private  MongoTemplate mongoTemplate;
+    private TransactionRepo transactionRepo;
 
     @RabbitListener(queues = "TransactionQueue")
     public void receiveDataFromProducer(DataFormat df) throws JsonProcessingException {
-        ObjectMapper objmap = new ObjectMapper();
-        Object nmsg1 = df.getJsonObject().get("Transaction");
-        String jsonString = objmap.writeValueAsString(nmsg1);
-        Transaction transaction = objmap.readValue(jsonString, Transaction.class);
-        trepo.save(transaction);
+        ObjectMapper objMap = new ObjectMapper();
+        Object msg1 = df.getJsonObject().get("Transaction");
+        String jsonString = objMap.writeValueAsString(msg1);
+        Transaction transaction = objMap.readValue(jsonString, Transaction.class);
+        transactionRepo.save(transaction);
         System.out.println(df.getJsonObject().toJSONString());
     }
 public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int numberOfTransactions) throws TransactionNotFound {
-      List<Transaction>  debitList = trepo.findByReceiverAccountNumber(accountNumber);
+      List<Transaction>  debitList = transactionRepo.findBySenderAccountNumber(accountNumber);
       Collections.sort(debitList,(t1,t2)->t1.getTransactionDate().compareTo(t2.getTransactionDate()));
       Collections.reverse(debitList);
         List<SenderTransaction> filteredDebitList = new ArrayList<>();
@@ -61,7 +57,7 @@ public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int num
     public List<ReceiverTransaction> fetchCreditTransactions(long accountNumber, int numberOfTransactions) throws TransactionNotFound{
 
 
-        List<Transaction>  creditList = trepo.findByReceiverAccountNumber(accountNumber);
+        List<Transaction>  creditList = transactionRepo.findByReceiverAccountNumber(accountNumber);
         Collections.sort(creditList,(t1,t2)->t1.getTransactionDate().compareTo(t2.getTransactionDate()));
         Collections.reverse(creditList);
         List<ReceiverTransaction> filteredCreditList = new ArrayList<>();
@@ -81,8 +77,8 @@ public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int num
         return filteredCreditList.stream().limit(numberOfTransactions).collect(Collectors.toList());
     }
     public List<Transaction> getTransactionHistory(long accountNumber,int numberOfTransactions) throws TransactionNotFound {
-        List<Transaction>  debitList = trepo.findBySenderAccountNumber(accountNumber);
-        List<Transaction>  creditList = trepo.findByReceiverAccountNumber(accountNumber);
+        List<Transaction>  debitList = transactionRepo.findBySenderAccountNumber(accountNumber);
+        List<Transaction>  creditList = transactionRepo.findByReceiverAccountNumber(accountNumber);
         List<Transaction> transactions = new ArrayList<>();
         transactions.addAll(debitList);
         transactions.addAll(creditList);
@@ -95,8 +91,8 @@ public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int num
 
     }
     public List<Transaction> getAllAcctTransactionHistory(String name, int numberOfTransactions) throws TransactionNotFound {
-        List<Transaction>  debitList = trepo.findBySenderName(name);
-        List<Transaction>  creditList = trepo.findByReceiverName(name);
+        List<Transaction>  debitList = transactionRepo.findBySenderName(name);
+        List<Transaction>  creditList = transactionRepo.findByReceiverName(name);
         List<Transaction> transactions = new ArrayList<>();
         transactions.addAll(creditList);
         transactions.addAll(debitList);

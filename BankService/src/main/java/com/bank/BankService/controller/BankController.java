@@ -6,7 +6,6 @@ import com.bank.BankService.exceptions.InvalidAccountNumberOrPin;
 import com.bank.BankService.model.Account;
 import com.bank.BankService.model.Bank;
 import com.bank.BankService.service.BankService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +23,9 @@ public class BankController {
     public static long getRandomNumber() {
 
         Random rnd = new Random();
-        long number = rnd.nextLong(999999999)*2556489;
+        return rnd.nextLong(999999999)*2561;
 
-        return number;
+
     }
     @PostMapping("createAccount/{bankName}/{branchName}")
     public ResponseEntity<?> createAccount(@PathVariable String bankName, @PathVariable String branchName,@RequestBody Account account) throws AccountAlreadyExists {
@@ -180,16 +179,15 @@ public class BankController {
         }
     }
     @PutMapping("transaction/{accountNumber}/{pin}/{amount}")
-    public ResponseEntity<?> makeTransaction(@PathVariable long accountNumber,@PathVariable int pin, @PathVariable double amount, @RequestBody Account receiverAccount){
+    public ResponseEntity<?> makeTransaction(@PathVariable long accountNumber,@PathVariable int pin, @PathVariable double amount, @RequestBody Account receiver){
         try
         {
-            bankService.sendAmount(accountNumber,pin,amount,receiverAccount);
+            bankService.sendAmount(accountNumber,pin,amount,receiver);
             Account senderAccount =bankService.fetchCustomerAccount(accountNumber,pin);
-            Account recvAct =bankService.fetchAccount(receiverAccount.getAccountNumber());
+            Account recieverAccount =bankService.fetchAccount(receiver.getAccountNumber());
             Bank sb =senderAccount.getBank();
-            Bank rb =recvAct.getBank();
-
-            bankService.sendTransactionData(senderAccount.getAccountHolderName(),accountNumber,sb.getIFSC(),recvAct.getAccountHolderName(),receiverAccount.getAccountNumber(),rb.getIFSC(),amount);
+            Bank rb =recieverAccount.getBank();
+            bankService.sendTransactionData(senderAccount.getAccountHolderName(),accountNumber,sb.getIFSC(),recieverAccount.getAccountHolderName(),receiver.getAccountNumber(),rb.getIFSC(),amount);
             return new ResponseEntity<>("Transaction successful",HttpStatus.OK);
         }
 

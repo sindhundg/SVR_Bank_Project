@@ -23,7 +23,7 @@ public class CustomerRepositoryTest {
     private CustomerRepo customerRepo;
     @BeforeEach
     public void setup(){
-    customer = new Customer(101,"Robert","abc@123","Robert@gmail.com","Bengaluru",231231334,25);
+    customer = new Customer(101,"Robert","Robert@gmail.com","abc@123",22,"Bengaluru",231231334);
     }
 
     @AfterEach
@@ -36,9 +36,9 @@ public class CustomerRepositoryTest {
     public void checkSuccessfulRegistration()
     {
         customerRepo.save(customer);
-        Customer customer1 = customerRepo.findById(customer.getCustomerid()).get();
+        Customer customer1 = customerRepo.findById(customer.getCustomerId()).get();
         assertNotNull(customer1);
-        assertEquals(customer.getCustomerid(),customer1.getCustomerid());
+        assertEquals(customer.getCustomerId(),customer1.getCustomerId());
     }
 
 }

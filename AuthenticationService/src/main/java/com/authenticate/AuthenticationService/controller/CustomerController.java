@@ -15,12 +15,12 @@ import java.util.Map;
 @RequestMapping("bank")
 public class CustomerController {
     @Autowired
-    private CustomerService custService;
+    private CustomerService customerService;
 
     @PostMapping("register")
     public ResponseEntity<?> registerCustomer(@RequestBody Customer customer) throws CustomerAlreadyExists, CustomerNotFound {
         try {
-            custService.register(customer);
+            customerService.register(customer);
             return new ResponseEntity<>("customer registration successfull", HttpStatus.CREATED);
         } catch (CustomerAlreadyExists cx) {
             throw new CustomerAlreadyExists("customer already exists");
@@ -33,7 +33,7 @@ public class CustomerController {
     @GetMapping("login/{email}/{password}")
     public ResponseEntity<?> loginCustomer(@PathVariable String email, @PathVariable String password) throws CustomerNotFound {
         try {
-            Map<String, String> token = custService.login(email, password);
+            Map<String, String> token = customerService.login(email, password);
             return new ResponseEntity<>(token, HttpStatus.OK);
         } catch (CustomerNotFound ex) {
             throw new CustomerNotFound("Invalid login credentials");
@@ -45,7 +45,7 @@ public class CustomerController {
     @PutMapping("updateCustomerDetails/{customerId}")
     public ResponseEntity<?> updateCustomerDetails(@RequestBody Customer cust, @PathVariable int customerId) throws CustomerNotFound{
         try {
-            custService.updateByCustId(cust, customerId);
+            customerService.updateByCustId(cust, customerId);
             return new ResponseEntity<>("Customer details updated", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -54,7 +54,7 @@ public class CustomerController {
     @DeleteMapping("deleteCustomerDetails/{customerID}")
     public ResponseEntity<?> deleteCustomerDetails(@PathVariable int customerID) throws CustomerNotFound {
         try{
-            custService.deleteCustById(customerID);
+            customerService.deleteCustById(customerID);
             return new ResponseEntity<>("Customer deleted successfully",HttpStatus.OK);
 
         }
