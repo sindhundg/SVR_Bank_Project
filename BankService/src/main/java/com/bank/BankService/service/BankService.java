@@ -43,7 +43,8 @@ public class BankService implements IBankService{
             throw  new InvalidAccountNumberOrPin("Either account number or pin is invalid");
         }
 
-       return bankRepo.deleteByAccountNumberAndPin(accountNumber, pin);
+       bankRepo.deleteByAccountNumberAndPin(accountNumber, pin);
+        return true;
 
     }
 
@@ -175,7 +176,7 @@ public class BankService implements IBankService{
         } else if (amount>accObj.get().getBalance()) {
             throw  new InsufficientBalance("Insufficient Balance");
         } else {
-            Account  senderAccount = bankRepo.findByAccountNumber(accountNumber);
+            Account  senderAccount = bankRepo.findByAccountNumberAndPin(accountNumber, pin);
             Account receiverAccount = bankRepo.findByAccountNumber(reciverAccount.getAccountNumber());
             senderAccount.setBalance(senderAccount.getBalance()-amount);
             receiverAccount.setBalance(receiverAccount.getBalance()+amount);

@@ -49,8 +49,8 @@ public class AccountRepositoryTest {
     {
         accountRepo.save(account);
         accountRepo.deleteByAccountNumberAndPin(account.getAccountNumber(),account.getPin());
-        Account accobj = accountRepo.findByAccountNumberAndPin(account.getAccountNumber(),account.getPin());
-        assertEquals(null, accobj);
+        Optional<Account> accobj = Optional.ofNullable(accountRepo.findByAccountNumberAndPin(account.getAccountNumber(),account.getPin()));
+        assertEquals(Optional.empty(), accobj);
     }
 
     @Test
