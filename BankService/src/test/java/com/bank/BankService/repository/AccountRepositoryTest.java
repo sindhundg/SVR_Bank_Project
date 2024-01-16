@@ -1,5 +1,5 @@
 package com.bank.BankService.repository;
-
+import com.bank.BankService.repository.AccountRepo;
 import com.bank.BankService.model.Account;
 import com.bank.BankService.model.Bank;
 import org.junit.jupiter.api.AfterEach;
@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,10 +36,22 @@ public class AccountRepositoryTest {
         accountRepo.deleteAll();
     }
     @Test
+    void contextLoads(){
+
+    }
+    @Test
     public void checkSuccessfulAccountCreation(){
         accountRepo.save(account);
         Account account1 = accountRepo.findByAccountNumber(account.getAccountNumber());
         assertNotNull(account1);
         assertEquals(account.getAccountNumber(),account1.getAccountNumber());
     }
+    @Test
+    public void checkDeletionSuccessfull(){
+        accountRepo.save(account);
+        accountRepo.deleteByAccountNumberAndPin(account.getAccountNumber(),account.getPin());
+        Optional<Account> a1= Optional.ofNullable(accountRepo.findByAccountNumberAndPin(account.getAccountNumber(), account.getPin()));
+        assertEquals(Optional.empty(),a1);
+
+}
 }
