@@ -113,7 +113,7 @@ public class BankController {
       }
 }
 
-    @PutMapping("updateAccount/{accountNumber}/{pin}")
+    @PatchMapping("updateAccount/{accountNumber}/{pin}")
     public ResponseEntity<?> updateAccountDetails(@PathVariable long accountNumber, @PathVariable int pin, @RequestBody Account acc) throws InvalidAccountNumberOrPin {
     try {
         bankService.updateAccountDetails(accountNumber, pin, acc);
