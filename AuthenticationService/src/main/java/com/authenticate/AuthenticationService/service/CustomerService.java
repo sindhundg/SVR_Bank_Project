@@ -5,7 +5,6 @@ import com.authenticate.AuthenticationService.exceptions.CustomerNotFound;
 import com.authenticate.AuthenticationService.model.Customer;
 import com.authenticate.AuthenticationService.repository.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.CustomMetric;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,15 +17,15 @@ import java.util.Optional;
 @Service
 public class CustomerService implements ICustomerService {
     @Autowired
-    private CustomerRepo crepo;
+    private CustomerRepo customerRepo;
 
 
     @Override
     public Customer register(Customer cust) throws CustomerAlreadyExists {
-        Optional<Customer> custObj = crepo.findById(cust.getCustomerid());
+        Optional<Customer> custObj = customerRepo.findById(cust.getCustomerId());
         if(custObj.isEmpty())
         {
-            Customer cc = crepo.save(cust);
+            Customer cc = customerRepo.save(cust);
             return cc;
         }
         else
@@ -38,7 +37,7 @@ public class CustomerService implements ICustomerService {
     @Override
     public Map<String, String> login(String email, String password) throws CustomerNotFound {
         Map<String,String> token=new HashMap<String,String>();
-        Optional<Customer> custObj = Optional.ofNullable(crepo.findByEmailAndPassword(email, password));
+        Optional<Customer> custObj = Optional.ofNullable(customerRepo.findByEmailAndPassword(email, password));
         if(custObj.isEmpty())
         {
             throw new CustomerNotFound("Customer not found");
@@ -52,21 +51,21 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public boolean updateByCustId(Customer cust, int custid) {
-        Customer existingCustomer = crepo.findById(custid).get();
+        Customer existingCustomer = customerRepo.findById(custid).get();
         existingCustomer.setCustomerName(cust.getCustomerName());
         existingCustomer.setAge(cust.getAge());
         existingCustomer.setEmail(cust.getEmail());
         existingCustomer.setPassword(cust.getPassword());
         existingCustomer.setCity(cust.getCity());
         existingCustomer.setPhoneNo(cust.getPhoneNo());
-        crepo.save(existingCustomer);
+        customerRepo.save(existingCustomer);
         return true;
     }
 
     @Override
     public boolean deleteCustById(int custId) {
 
-       crepo.deleteById(custId);
+       customerRepo.deleteById(custId);
        return true;
     }
 

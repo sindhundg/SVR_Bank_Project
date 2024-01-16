@@ -5,8 +5,8 @@ import com.authenticate.AuthenticationService.exceptions.CustomerNotFound;
 import com.authenticate.AuthenticationService.model.Customer;
 import java.util.Map;
 public interface ICustomerService {
-    public Customer register(Customer cust) throws CustomerAlreadyExists;
+    public Customer register(Customer customer) throws CustomerAlreadyExists;
     public Map<String,String> login(String email, String password) throws CustomerNotFound;
-    public boolean updateByCustId(Customer cust,int custid);
-    public boolean deleteCustById(int custId);
+    public boolean updateByCustId(Customer customer,int customerId);
+    public boolean deleteCustById(int customerId);
 }
