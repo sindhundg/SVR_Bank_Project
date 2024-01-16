@@ -6,9 +6,8 @@ import com.transaction.TransactionService.model.SenderTransaction;
 import com.transaction.TransactionService.model.Transaction;
 import com.transaction.TransactionService.repository.TransactionRepo;
 
-import org.springframework.data.domain.Sort;
+
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,11 +19,7 @@ import com.transaction.TransactionService.rabbitmqconfiguration.DataFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-
-
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
@@ -43,10 +38,9 @@ public class TransactionService {
         System.out.println(df.getJsonObject().toJSONString());
     }
 public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int numberOfTransactions) throws TransactionNotFound {
-        Query query = new Query();
-        query.addCriteria(where("senderAccountNumber").is(accountNumber)).limit(numberOfTransactions);
-        query.with(Sort.by(Sort.Direction.DESC,"transactionDate"));
-        List<Transaction> debitList =   mongoTemplate.find(query,Transaction.class);
+      List<Transaction>  debitList = trepo.findByReceiverAccountNumber(accountNumber);
+      Collections.sort(debitList,(t1,t2)->t1.getTransactionDate().compareTo(t2.getTransactionDate()));
+      Collections.reverse(debitList);
         List<SenderTransaction> filteredDebitList = new ArrayList<>();
         for (Transaction t:debitList){
             SenderTransaction t1 = new SenderTransaction();
@@ -61,15 +55,15 @@ public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int num
         if(debitList.isEmpty()){
         throw new TransactionNotFound("No transactions found");
     }
-    return filteredDebitList;
+    return filteredDebitList.stream().limit(numberOfTransactions).collect(Collectors.toList());
 
 }
     public List<ReceiverTransaction> fetchCreditTransactions(long accountNumber, int numberOfTransactions) throws TransactionNotFound{
 
-        Query query = new Query();
-        query.addCriteria(where("receiverAccountNumber").is(accountNumber)).limit(numberOfTransactions);
-        query.with(Sort.by(Sort.Direction.DESC,"transactionDate"));
-        List<Transaction> creditList = mongoTemplate.find(query,Transaction.class);
+
+        List<Transaction>  creditList = trepo.findByReceiverAccountNumber(accountNumber);
+        Collections.sort(creditList,(t1,t2)->t1.getTransactionDate().compareTo(t2.getTransactionDate()));
+        Collections.reverse(creditList);
         List<ReceiverTransaction> filteredCreditList = new ArrayList<>();
         for (Transaction t:creditList){
             ReceiverTransaction t1 = new ReceiverTransaction();
@@ -84,9 +78,9 @@ public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int num
         if(creditList.isEmpty()){
             throw new TransactionNotFound("No transactions found");
         }
-        return filteredCreditList;
+        return filteredCreditList.stream().limit(numberOfTransactions).collect(Collectors.toList());
     }
-    public List<Transaction> getTransactionHistory(long accountNumber) throws TransactionNotFound {
+    public List<Transaction> getTransactionHistory(long accountNumber,int numberOfTransactions) throws TransactionNotFound {
         List<Transaction>  debitList = trepo.findBySenderAccountNumber(accountNumber);
         List<Transaction>  creditList = trepo.findByReceiverAccountNumber(accountNumber);
         List<Transaction> transactions = new ArrayList<>();
@@ -97,9 +91,10 @@ public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int num
         if (transactions.isEmpty()){
             throw new TransactionNotFound("No transactions found");
         }
-        return  transactions;
+        return transactions.stream().limit(numberOfTransactions).collect(Collectors.toList());
+
     }
-    public List<Transaction> getAllAcctTransactionHistory(String name) throws TransactionNotFound {
+    public List<Transaction> getAllAcctTransactionHistory(String name, int numberOfTransactions) throws TransactionNotFound {
         List<Transaction>  debitList = trepo.findBySenderName(name);
         List<Transaction>  creditList = trepo.findByReceiverName(name);
         List<Transaction> transactions = new ArrayList<>();
@@ -110,7 +105,7 @@ public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int num
         if (transactions.isEmpty()){
             throw  new TransactionNotFound("No transactions found");
         }
-        return  transactions;
+        return transactions.stream().limit(numberOfTransactions).collect(Collectors.toList());
 
     }
 }
