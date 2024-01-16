@@ -36,17 +36,18 @@ public class BankService implements IBankService{
     }
 
     @Override
-    public boolean deleteAccount(long accountNumber, int pin) throws InvalidAccountNumberOrPin {
-        Optional<Account> dopt = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber,pin));
-        if(dopt.isEmpty())
-        {
-            throw  new InvalidAccountNumberOrPin("Either account number or pin is invalid");
-        }
-//        Account account =dopt.get();
-        bankRepo.deleteByAccountNumberAndPin(accountNumber, pin);
-        return true;
-    }
+    public boolean deleteAccount(long accountNumber, int pin)throws InvalidAccountNumberOrPin {
 
+        Optional<Account> account = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
+        if (account.isPresent()) {
+
+            bankRepo.deleteByAccountNumberAndPin(accountNumber, pin);
+            return true;
+        } else {
+            throw new InvalidAccountNumberOrPin("Either account number or pin is invalid");
+
+        }
+    }
     @Override
     public double showBalance(long accountNumber, int pin) throws  InvalidAccountNumberOrPin {
         Optional<Account> aopt = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
