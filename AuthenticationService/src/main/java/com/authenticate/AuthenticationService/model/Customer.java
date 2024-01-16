@@ -6,35 +6,33 @@ import jakarta.persistence.Id;
 @Entity
 public class Customer {
     @Id
-    private int customerid;
-    private int age;
+    private int customerId;
     private String customerName;
-    private String password;
     private String email;
+    private String password;
+    private int age;
     private String city;
     private long phoneNo;
 
     public Customer() {
     }
 
-    public Customer(int customerid, String customerName, String password, String email, String city, long phoneNo, int age) {
-        this.customerid = customerid;
+    public Customer(int customerId, String customerName, String email, String password, int age, String city, long phoneNo) {
+        this.customerId = customerId;
         this.customerName = customerName;
-        this.password = password;
         this.email = email;
+        this.password = password;
+        this.age = age;
         this.city = city;
         this.phoneNo = phoneNo;
-        this.age = age;
     }
 
-
-
-    public int getCustomerid() {
-        return customerid;
+    public int getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomerid(int customerid) {
-        this.customerid = customerid;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
     public String getCustomerName() {
@@ -45,6 +43,14 @@ public class Customer {
         this.customerName = customerName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -53,12 +59,12 @@ public class Customer {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public int getAge() {
+        return age;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getCity() {
@@ -77,22 +83,14 @@ public class Customer {
         this.phoneNo = phoneNo;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
     @Override
     public String toString() {
         return "Customer{" +
-                "customerid=" + customerid +
-                ", age=" + age +
+                "customerId=" + customerId +
                 ", customerName='" + customerName + '\'' +
-                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", age=" + age +
                 ", city='" + city + '\'' +
                 ", phoneNo=" + phoneNo +
                 '}';

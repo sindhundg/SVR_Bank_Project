@@ -1,5 +1,5 @@
 package com.authenticate.AuthenticationService.filter;
-import com.authenticate.AuthenticationService.model.Customer;
+
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

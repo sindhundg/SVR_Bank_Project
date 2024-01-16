@@ -3,7 +3,7 @@ package com.transaction.TransactionService.model;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
+
 
 import java.util.Date;
 
@@ -12,7 +12,6 @@ import java.util.Date;
 public class Transaction {
     @Id
     private long transactionId = System.currentTimeMillis();
-
     private String senderName;
     private long senderAccountNumber;
     private String senderBankIfsc;
@@ -21,7 +20,6 @@ public class Transaction {
     private String receiverBankIfsc;
 
     private double transactionAmount;
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @CreatedDate()
     private Date transactionDate = new Date();
 

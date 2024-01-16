@@ -30,24 +30,23 @@ public class BankService implements IBankService{
         }
         else {
 
-           Account bank1= bankRepo.save(account);
-            return bank1;
+            return  bankRepo.save(account);
+
         }
     }
 
     @Override
-    public boolean deleteAccount(long accountNumber, int pin)throws InvalidAccountNumberOrPin {
-
-        Optional<Account> account = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
-        if (account.isPresent()) {
-
-            bankRepo.deleteByAccountNumberAndPin(accountNumber, pin);
-            return true;
-        } else {
-            throw new InvalidAccountNumberOrPin("Either account number or pin is invalid");
-
+    public boolean deleteAccount(long accountNumber, int pin) throws InvalidAccountNumberOrPin {
+        Optional<Account> dopt = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber,pin));
+        if(dopt.isEmpty())
+        {
+            throw  new InvalidAccountNumberOrPin("Either account number or pin is invalid");
         }
+
+       return bankRepo.deleteByAccountNumberAndPin(accountNumber, pin);
+
     }
+
     @Override
     public double showBalance(long accountNumber, int pin) throws  InvalidAccountNumberOrPin {
         Optional<Account> aopt = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
@@ -68,8 +67,8 @@ public class BankService implements IBankService{
         }
         else
         {
-            Account account = bankRepo.findByAccountNumberAndPin(accountNumber, pin);
-            return account;
+            return bankRepo.findByAccountNumberAndPin(accountNumber, pin);
+
         }
     }
     @Override
@@ -80,8 +79,8 @@ public class BankService implements IBankService{
         }
         else
         {
-            Account account = bankRepo.findByAccountNumber(accountNumber);
-            return account;
+            return bankRepo.findByAccountNumber(accountNumber);
+
         }
     }
 
@@ -160,18 +159,17 @@ public class BankService implements IBankService{
     @Override
     public boolean sendAmount(long accountNumber, int pin, double amount,Account reciverAccount) throws AccountNotFound, InsufficientBalance, TransactionNotAllowed {
         Optional<Account> accObj = Optional.ofNullable(bankRepo.findByAccountNumberAndPin(accountNumber, pin));
-        Optional<Account> recvaccount = Optional.ofNullable(bankRepo.findByAccountNumber(reciverAccount.getAccountNumber()));
+        Optional<Account> recvAccount = Optional.ofNullable(bankRepo.findByAccountNumber(reciverAccount.getAccountNumber()));
 //
         if (accObj.isEmpty())
         {
             throw new AccountNotFound("Sender account not found");
         }
-        else if(recvaccount.get().getAccountNumber() == accountNumber){
+        else if (recvAccount.isEmpty()) {
+            throw new AccountNotFound("Receiver account not found");}
+        else if(recvAccount.get().getAccountNumber() == accountNumber){
             throw  new TransactionNotAllowed("Transaction not allowed");
         }
-        else if (recvaccount.isEmpty()) {
-            throw new AccountNotFound("Receiver account not found");}
-
         else if(accObj.get().getBalance()<=0.0){
             throw  new InsufficientBalance("Insufficient Balance");
         } else if (amount>accObj.get().getBalance()) {
