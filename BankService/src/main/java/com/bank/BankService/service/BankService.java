@@ -43,7 +43,8 @@ public class BankService implements IBankService{
             throw  new InvalidAccountNumberOrPin("Either account number or pin is invalid");
         }
 
-       return bankRepo.deleteByAccountNumberAndPin(accountNumber, pin);
+        bankRepo.deleteByAccountNumberAndPin(accountNumber, pin);
+        return true;
 
     }
 

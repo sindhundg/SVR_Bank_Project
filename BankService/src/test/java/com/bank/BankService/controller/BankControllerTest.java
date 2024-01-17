@@ -106,7 +106,7 @@ public class BankControllerTest {
     }
 
     @Test
-    public void checkGetAccountsuccesfull() throws Exception {
+    public void checkGetAccountSuccesfull() throws Exception {
         when(bser.fetchCustomerAccount(anyLong(), anyInt())).thenReturn(account);
         mockmvc.perform(get("/bank/getAccount/2131231233/5555")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -145,7 +145,7 @@ public class BankControllerTest {
     verify(bser, times(1)).updateAccountEmail(anyLong(), anyInt(),anyString());
 }
 @Test
-    public void checkUpdatePhonrSuccess() throws Exception{
+    public void checkUpdatePhoneNoSuccess() throws Exception{
         when(bser.updateAccountPhoneNo(anyLong(),anyInt(),anyLong())).thenReturn(true);
         mockmvc.perform(put("/bank/updateAccountPhoneNo/2131231233/5555/989143434")
                 .contentType(MediaType.APPLICATION_JSON))
