@@ -103,7 +103,7 @@ public class BankController {
 @DeleteMapping("deleteAccount/{accountNumber}/{pin}")
     public ResponseEntity<?> deleteAccountByAccountNumber(@PathVariable long accountNumber, @PathVariable int pin) throws AccountNotFound {
       try{  bankService.deleteAccount(accountNumber,pin);
-        return new ResponseEntity<>("Account deleted Successfully",HttpStatus.OK);}
+        return new ResponseEntity<>("Deleted successfully",HttpStatus.OK);}
       catch (InvalidAccountNumberOrPin ane){
           throw  new AccountNotFound("Either account number or pin is invalid");
       }
