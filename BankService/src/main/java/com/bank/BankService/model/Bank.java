@@ -1,6 +1,5 @@
 package com.bank.BankService.model;
-
-
+// Bank class for bank details
 public class Bank {
     private String IFSC;
     private String bankName;

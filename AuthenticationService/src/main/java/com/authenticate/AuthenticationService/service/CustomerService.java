@@ -14,12 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+//Annotation
 @Service
+
 public class CustomerService implements ICustomerService {
     @Autowired
     private CustomerRepo customerRepo;
 
-
+// Method to register the new customer
     @Override
     public Customer register(Customer cust) throws CustomerAlreadyExists {
         Optional<Customer> custObj = customerRepo.findById(cust.getCustomerId());
@@ -33,7 +35,7 @@ public class CustomerService implements ICustomerService {
             throw new CustomerAlreadyExists("Customer already exists");
         }
     }
-
+// Method for logging in with email and password
     @Override
     public Map<String, String> login(String email, String password) throws CustomerNotFound {
         Map<String,String> token=new HashMap<String,String>();
@@ -43,12 +45,13 @@ public class CustomerService implements ICustomerService {
             throw new CustomerNotFound("Customer not found");
         }
         else {
+            // returns token if successfully logged in
             token = getJwtToken(email);
             return token;
         }
 
     }
-
+// Method for updating customer details using id
     @Override
     public boolean updateByCustId(Customer cust, int custid) {
         Customer existingCustomer = customerRepo.findById(custid).get();
@@ -61,14 +64,14 @@ public class CustomerService implements ICustomerService {
         customerRepo.save(existingCustomer);
         return true;
     }
-
+// Method for deleting the account
     @Override
     public boolean deleteCustById(int custId) {
 
        customerRepo.deleteById(custId);
        return true;
     }
-
+//Method to generate jwt token
     public Map<String,String> getJwtToken(String email){
         Map<String,String> tok=new HashMap<String,String>();
         String jwtToken= Jwts.builder().setSubject(email).setIssuedAt( new Date(0))

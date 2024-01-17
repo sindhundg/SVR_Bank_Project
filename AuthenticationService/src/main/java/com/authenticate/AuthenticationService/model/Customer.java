@@ -3,6 +3,7 @@ package com.authenticate.AuthenticationService.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+//pojo class for customer details
 @Entity
 public class Customer {
     @Id

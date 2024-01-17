@@ -17,11 +17,12 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    // API Endpoint for user registration
     @PostMapping("register")
     public ResponseEntity<?> registerCustomer(@RequestBody Customer customer) throws CustomerAlreadyExists, CustomerNotFound {
         try {
             customerService.register(customer);
-            return new ResponseEntity<>("customer registration successfull", HttpStatus.CREATED);
+            return new ResponseEntity<>("customer registration successful", HttpStatus.CREATED);
         } catch (CustomerAlreadyExists cx) {
             throw new CustomerAlreadyExists("customer already exists");
         } catch (Exception e) {
@@ -29,7 +30,7 @@ public class CustomerController {
         }
     }
 
-
+// API Endpoint for customer login
     @GetMapping("login/{email}/{password}")
     public ResponseEntity<?> loginCustomer(@PathVariable String email, @PathVariable String password) throws CustomerNotFound {
         try {
@@ -41,7 +42,7 @@ public class CustomerController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+// API Endpoint for updating customer details
     @PutMapping("updateCustomerDetails/{customerId}")
     public ResponseEntity<?> updateCustomerDetails(@RequestBody Customer cust, @PathVariable int customerId) throws CustomerNotFound{
         try {
@@ -51,6 +52,7 @@ public class CustomerController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    // API Endpoint for deleting the account
     @DeleteMapping("deleteCustomerDetails/{customerID}")
     public ResponseEntity<?> deleteCustomerDetails(@PathVariable int customerID) throws CustomerNotFound {
         try{

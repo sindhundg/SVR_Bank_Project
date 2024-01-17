@@ -23,37 +23,39 @@ public class BankController {
     public static long getRandomNumber() {
 
         Random rnd = new Random();
-        return rnd.nextLong(999999999)*2561;
+        return rnd.nextLong(999999999);
 
 
     }
+    //Endpoint for creating bank account
     @PostMapping("createAccount/{bankName}/{branchName}")
     public ResponseEntity<?> createAccount(@PathVariable String bankName, @PathVariable String branchName,@RequestBody Account account) throws AccountAlreadyExists {
        try {
+
            String IFSC = "";
-           if(bankName.equals("SBI")){
+           if(bankName.equalsIgnoreCase("SBI")){
                IFSC="SBI1234"+branchName.toUpperCase();
-           } else if (bankName.equals("HDFC")) {
+           } else if (bankName.equalsIgnoreCase("HDFC")) {
                IFSC="HDFC1234"+branchName.toUpperCase();
-           } else if (bankName.equals("AXIS")) {
+           } else if (bankName.equalsIgnoreCase("AXIS")) {
                IFSC="AXIS1234"+branchName.toUpperCase();
            }
-           else if (bankName.equals("ICICI")) {
+           else if (bankName.equalsIgnoreCase("ICICI")) {
                IFSC="ICICI1234"+branchName.toUpperCase();
            }
            long accountNumber =  getRandomNumber();
            long millis = System.currentTimeMillis() % 1000;
-           Bank b = new Bank(IFSC,bankName,branchName);
-           account.setId(accountNumber+millis);
+           Bank b = new Bank(IFSC,bankName.toUpperCase(),branchName.toUpperCase());
+           account.setId(account.getId());
            account.setBank(b);
            account.setAccountHolderName(account.getAccountHolderName().toUpperCase());
-           account.setAccountNumber(accountNumber);
+           account.setAccountNumber(accountNumber*millis);
            account.setEmail(account.getEmail());
            account.setPhoneNo(account.getPhoneNo());
            account.setPin(account.getPin());
            account.setBalance(account.getBalance());
            bankService.createAccount(account);
-           return new ResponseEntity<>(b, HttpStatus.CREATED);
+           return new ResponseEntity<>(account, HttpStatus.CREATED);
        }
        catch (AccountAlreadyExists ae){
            throw new AccountAlreadyExists("Account already exists");
@@ -63,6 +65,7 @@ public class BankController {
        }
 
     }
+    //Endpoint for checking the balance in the account
     @GetMapping("showBalance/{accountNumber}/{pin}")
     public ResponseEntity<?> getBalance(@PathVariable long accountNumber, @PathVariable int pin) throws  InvalidAccountNumberOrPin {
        try{
@@ -75,6 +78,7 @@ public class BankController {
            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
        }
     }
+    // Endpoint to view individual account details using acc no and pin
     @GetMapping("getAccount/{accountNumber}/{pin}")
     public ResponseEntity<?> fetchAccount(@PathVariable long accountNumber, @PathVariable int pin) throws InvalidAccountNumberOrPin {
        try{ Account account = bankService.fetchCustomerAccount(accountNumber,pin);
@@ -87,6 +91,7 @@ public class BankController {
            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
        }
     }
+    //
     @GetMapping("getAccounts/{accountHolderName}")
     public ResponseEntity<?> getAccounts(@PathVariable String accountHolderName) throws AccountNotFound {
       try {
@@ -100,6 +105,7 @@ public class BankController {
         return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
+    //Endpoint to delete account
 @DeleteMapping("deleteAccount/{accountNumber}/{pin}")
     public ResponseEntity<?> deleteAccountByAccountNumber(@PathVariable long accountNumber, @PathVariable int pin) throws AccountNotFound {
       try{  bankService.deleteAccount(accountNumber,pin);
@@ -112,6 +118,7 @@ public class BankController {
       }
 }
 
+// Endpoint to update account details
     @PatchMapping("updateAccount/{accountNumber}/{pin}")
     public ResponseEntity<?> updateAccountDetails(@PathVariable long accountNumber, @PathVariable int pin, @RequestBody Account acc) throws InvalidAccountNumberOrPin {
     try {
@@ -128,7 +135,7 @@ public class BankController {
     }
 }
 
-
+// Endpoint to update email
     @PutMapping("updateAccountEmail/{accountNumber}/{pin}/{email}")
     public ResponseEntity<?> updateAccountEmail(@PathVariable long accountNumber, @PathVariable int pin, @PathVariable String email) throws  InvalidAccountNumberOrPin {
         try {
@@ -145,7 +152,7 @@ public class BankController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+// Endpoint to update phone number
     @PutMapping("updateAccountPhoneNo/{accountNumber}/{pin}/{phoneNo}")
     public ResponseEntity<?> updateAccountPhoneNo(@PathVariable long accountNumber, @PathVariable int pin, @PathVariable long phoneNo) throws InvalidAccountNumberOrPin {
         try {
@@ -162,6 +169,7 @@ public class BankController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    // Endpoint to update pin
     @PutMapping("updateAccountPin/{accountNumber}/{pin}/{newPin}")
     public ResponseEntity<?> updateAccountPin(@PathVariable long accountNumber, @PathVariable int pin, @PathVariable int newPin) throws InvalidAccountNumberOrPin {
         try {
@@ -178,6 +186,7 @@ public class BankController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    //Endpoint to make transactions between the accounts
     @PutMapping("transaction/{accountNumber}/{pin}/{amount}")
     public ResponseEntity<?> makeTransaction(@PathVariable long accountNumber,@PathVariable int pin, @PathVariable double amount, @RequestBody Account receiver){
         try

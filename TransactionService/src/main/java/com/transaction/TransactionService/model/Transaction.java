@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-
+// pojo class for transaction
 @Document
 public class Transaction {
     @Id

@@ -24,6 +24,7 @@ public class TransactionService {
     @Autowired
     private TransactionRepo transactionRepo;
 
+    // Recieves the data from bank service
     @RabbitListener(queues = "TransactionQueue")
     public void receiveDataFromProducer(DataFormat df) throws JsonProcessingException {
         ObjectMapper objMap = new ObjectMapper();
@@ -33,6 +34,8 @@ public class TransactionService {
         transactionRepo.save(transaction);
         System.out.println(df.getJsonObject().toJSONString());
     }
+
+    // Method to view debit details
 public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int numberOfTransactions) throws TransactionNotFound {
       List<Transaction>  debitList = transactionRepo.findBySenderAccountNumber(accountNumber);
       Collections.sort(debitList,(t1,t2)->t1.getTransactionDate().compareTo(t2.getTransactionDate()));
@@ -54,6 +57,7 @@ public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int num
     return filteredDebitList.stream().limit(numberOfTransactions).collect(Collectors.toList());
 
 }
+// Method to view credit details
     public List<ReceiverTransaction> fetchCreditTransactions(long accountNumber, int numberOfTransactions) throws TransactionNotFound{
 
 
@@ -76,6 +80,8 @@ public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int num
         }
         return filteredCreditList.stream().limit(numberOfTransactions).collect(Collectors.toList());
     }
+
+    //Shows the previous transactions made
     public List<Transaction> getTransactionHistory(long accountNumber,int numberOfTransactions) throws TransactionNotFound {
         List<Transaction>  debitList = transactionRepo.findBySenderAccountNumber(accountNumber);
         List<Transaction>  creditList = transactionRepo.findByReceiverAccountNumber(accountNumber);
@@ -90,6 +96,8 @@ public List<SenderTransaction> fetchDebitTransactions(long accountNumber,int num
         return transactions.stream().limit(numberOfTransactions).collect(Collectors.toList());
 
     }
+
+    //Shows transaction history of all accounts of the customer
     public List<Transaction> getAllAcctTransactionHistory(String name, int numberOfTransactions) throws TransactionNotFound {
         List<Transaction>  debitList = transactionRepo.findBySenderName(name);
         List<Transaction>  creditList = transactionRepo.findByReceiverName(name);

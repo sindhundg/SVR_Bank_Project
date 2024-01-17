@@ -2,6 +2,7 @@ package com.transaction.TransactionService.model;
 
 import java.util.Date;
 
+
 public class ReceiverTransaction {
     private long transactionId;
     private String senderName;

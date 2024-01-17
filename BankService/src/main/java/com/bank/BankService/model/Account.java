@@ -3,11 +3,11 @@ package com.bank.BankService.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
+// pojo class for Account details
 @Document
 public class Account {
     @Id
-    private long id;
+    private int id;
     private long accountNumber;
     private String accountHolderName;
     private String email;
@@ -20,7 +20,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(long id, long accountNumber, String accountHolderName, String email, long phoneNo, double balance, int pin, Bank bank) {
+    public Account(int id, long accountNumber, String accountHolderName, String email, long phoneNo, double balance, int pin, Bank bank) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.accountHolderName = accountHolderName;
@@ -31,11 +31,11 @@ public class Account {
         this.bank = bank;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+// Custom repository methods
 @Repository
 public interface AccountRepo extends MongoRepository<Account,Double> {
     public List<Account> findByAccountHolderName(String accountHolderName);

@@ -3,7 +3,7 @@ package com.bank.BankService.model;
 
 
 
-
+// pojo class for transaction details
 public class Transaction {
 
 

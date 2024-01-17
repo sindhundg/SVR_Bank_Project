@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -133,7 +132,7 @@ public class BankServiceTest {
 
     @Test
     public void checkSendAmountSuccess() throws TransactionNotAllowed, InsufficientBalance, AccountNotFound {
-        when(accountRepo.findByAccountNumberAndPin(account.getAccountNumber(), account.getPin())).thenReturn(account);
+        when(accountRepo.findByAccountNumberAndPin(2131231233, account.getPin())).thenReturn(account);
         when(accountRepo.findByAccountNumber(account2.getAccountNumber())).thenReturn(account2);
         bankService.sendAmount(account.getAccountNumber(), account.getPin(), 500.0, account2);
         assertEquals(2500.0, account.getBalance());
