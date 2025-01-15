@@ -1,9 +1,0 @@
-/home/ubuntu/CAPSTONEPROJECT/finalcapstoneproject/AuthenticationService/src/main/java/com/authenticate/AuthenticationService/exceptions/CustomerAlreadyExists.java
-/home/ubuntu/CAPSTONEPROJECT/finalcapstoneproject/AuthenticationService/src/main/java/com/authenticate/AuthenticationService/filter/Filter.java
-/home/ubuntu/CAPSTONEPROJECT/finalcapstoneproject/AuthenticationService/src/main/java/com/authenticate/AuthenticationService/AuthenticationServiceApplication.java
-/home/ubuntu/CAPSTONEPROJECT/finalcapstoneproject/AuthenticationService/src/main/java/com/authenticate/AuthenticationService/repository/CustomerRepo.java
-/home/ubuntu/CAPSTONEPROJECT/finalcapstoneproject/AuthenticationService/src/main/java/com/authenticate/AuthenticationService/controller/CustomerController.java
-/home/ubuntu/CAPSTONEPROJECT/finalcapstoneproject/AuthenticationService/src/main/java/com/authenticate/AuthenticationService/service/ICustomerService.java
-/home/ubuntu/CAPSTONEPROJECT/finalcapstoneproject/AuthenticationService/src/main/java/com/authenticate/AuthenticationService/service/CustomerService.java
-/home/ubuntu/CAPSTONEPROJECT/finalcapstoneproject/AuthenticationService/src/main/java/com/authenticate/AuthenticationService/exceptions/CustomerNotFound.java
-/home/ubuntu/CAPSTONEPROJECT/finalcapstoneproject/AuthenticationService/src/main/java/com/authenticate/AuthenticationService/model/Customer.java
