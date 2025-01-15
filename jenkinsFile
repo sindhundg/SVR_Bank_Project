@@ -21,7 +21,7 @@ pipeline {
 
         stage('Build Docker Image - Authentication Service') {
             environment {
-                REGISTRY = 'ndgsindhu'
+                REGISTRY = 'docker.io/ndgsindhu'
                 IMAGE_TAG = "${env.BUILD_ID}"
                 DOCKER_CREDENTIALS = credentials('docker-cred')
             }
