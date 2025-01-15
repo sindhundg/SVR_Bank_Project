@@ -17,5 +17,26 @@ pipeline {
                 }
             }
         }
+
+
+        stage('Build Docker Image - Authentication Service') {
+            environment {
+                REGISTRY = 'ndgsindhu'
+                IMAGE_TAG = "${env.BUILD_ID}"
+                DOCKER_CREDENTIALS = credentials('docker-cred')
+            }
+            steps {
+                script {
+                    // Athenticate with docker registry
+                    withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh """
+                        echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin ${REGISTRY}
+                        docker build -t ${REGISTRY}/authentication:${IMAGE_TAG} -f AuthenticationService/Dockerfile .
+                        """
+                        
+                    }
+                }
+            }
+        }
     }
 }
