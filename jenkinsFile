@@ -32,8 +32,9 @@ pipeline {
                         sh """
                         echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin ${REGISTRY}
                         docker build -t ${REGISTRY}/authentication:${IMAGE_TAG} -f AuthenticationService/Dockerfile .
+                        docker push ${REGISTRY}/authentication/${IMAGE_TAG}
                         """
-                        
+
                     }
                 }
             }
