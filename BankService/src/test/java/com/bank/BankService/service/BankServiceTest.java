@@ -63,7 +63,7 @@ public class BankServiceTest {
     }
     @Test
     public void checkCreateAccountFailure() {
-        when(accountRepo.findById((double) account.getId())).thenReturn(Optional.ofNullable(account));
+        when(accountRepo.findById(account.getId())).thenReturn(Optional.ofNullable(account));
         assertThrows(AccountAlreadyExists.class,()-> bankService.createAccount(account));
     }
 
