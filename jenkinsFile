@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    sh "echo 'git checkout'"
+                }
+            }
+        }
+
+        stage('Build and Test') {
+            steps {
+                script {
+                    sh "mvn clean install"
+                }
+            }
+        }
+    }
+}

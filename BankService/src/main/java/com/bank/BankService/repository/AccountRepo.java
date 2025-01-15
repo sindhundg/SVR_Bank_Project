@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 // Custom repository methods
 @Repository
-public interface AccountRepo extends MongoRepository<Account,Double> {
+public interface AccountRepo extends MongoRepository<Account,Integer> {
     public List<Account> findByAccountHolderName(String accountHolderName);
     public Account findByAccountNumber(long accountNumber);
     public Account findByAccountNumberAndPin(long accountNumber, int pin);

@@ -26,7 +26,7 @@ public class BankService implements IBankService{
     //Method for creating bank account
     @Override
     public Account createAccount(Account account) throws AccountAlreadyExists {
-        Optional<Account> bopt = accountRepository.findById((double) account.getId());
+        Optional<Account> bopt = accountRepository.findById(account.getId());
         List<Account> accountList = accountRepository.findAll();
 
         if (bopt.isPresent()) {
