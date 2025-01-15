@@ -1,0 +1,4 @@
+/home/ubuntu/CAPSTONEPROJECT/finalcapstoneproject/AuthenticationService/src/test/java/com/authenticate/AuthenticationService/AuthenticationServiceApplicationTests.java
+/home/ubuntu/CAPSTONEPROJECT/finalcapstoneproject/AuthenticationService/src/test/java/com/authenticate/AuthenticationService/repository/CustomerRepositoryTest.java
+/home/ubuntu/CAPSTONEPROJECT/finalcapstoneproject/AuthenticationService/src/test/java/com/authenticate/AuthenticationService/controller/CustomerControllerTest.java
+/home/ubuntu/CAPSTONEPROJECT/finalcapstoneproject/AuthenticationService/src/test/java/com/authenticate/AuthenticationService/service/CustomerServiceTest.java

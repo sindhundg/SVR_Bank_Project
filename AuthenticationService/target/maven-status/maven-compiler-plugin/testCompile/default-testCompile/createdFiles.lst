@@ -1,0 +1,3 @@
+com/authenticate/AuthenticationService/repository/CustomerRepositoryTest.class
+com/authenticate/AuthenticationService/service/CustomerServiceTest.class
+com/authenticate/AuthenticationService/controller/CustomerControllerTest.class
