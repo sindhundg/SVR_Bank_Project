@@ -13,7 +13,7 @@ pipeline {
         stage('Build and Test') {
             steps {
                 script {
-                    sh "mvn clean install"
+                    sh "cd AuthenticationService && mvn clean install"
                 }
             }
         }
@@ -30,6 +30,7 @@ pipeline {
                     // Athenticate with docker registry
                     withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh """
+                        cd AuthenticationService
                         echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin ${REGISTRY}
                         docker build -t ${REGISTRY}/authentication:${IMAGE_TAG} -f AuthenticationService/Dockerfile .
                         docker push ${REGISTRY}/authentication/${IMAGE_TAG}
