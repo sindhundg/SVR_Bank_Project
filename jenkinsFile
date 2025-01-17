@@ -106,15 +106,17 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
-                    sh '''
+                    sh """
                     git config user.email "sindhundg@gmail.com"
                     git config user.name "NdgSindhu"
                     BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i 's|image: ndgsindhu/authentication:.*|image: ndgsindhu/authentication:${IMAGE_TAG}|' ${K8S_MANIFESTS_DIR}/authenticationService.yaml
+                    cat Kubernetes/authenticationService.yaml
+                    sed -i 's|image: ndgsindhu/authentication:.*|image: ndgsindhu/authentication:${BUILD_NUMBER}|' ${K8S_MANIFESTS_DIR}/authenticationService.yaml
+                    cat Kubernetes/authenticationService.yaml
                     git add Kubernetes/authenticationService.yaml
                     git commit -m "Update deployment image to version ${IMAGE_TAG}"
                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-                    '''
+                    """
                 }
 
             }
