@@ -3,7 +3,7 @@ pipeline {
     environment {
         REGISTRY = 'https://index.docker.io/v1/'
         DOCKER_REPO = 'ndgsindhu'
-        IMAGE_TAG = "${env.BUILD_ID}"
+        IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKER_CREDENTIALS = credentials('docker-cred')
         K8S_MANIFESTS_DIR = 'Kubernetes'
     }
@@ -109,9 +109,8 @@ pipeline {
                     sh '''
                     git config user.email "sindhundg@gmail.com"
                     git config user.name "NdgSindhu"
-                    cat Kubernetes/authenticationService.yaml
-                    sed -i 's|image: ${DOCKER_REPO}/authentication:.*|image: ${DOCKER_REPO}/authentication:${IMAGE_TAG}|' ${K8S_MANIFESTS_DIR}/authenticationService.yaml
-                    cat Kubernetes/authenticationService.yaml
+                    BUILD_NUMBER=${BUILD_NUMBER}
+                    sed -i 's|image: ndgsindhu/authentication:.*|image: ndgsindhu/authentication:${IMAGE_TAG}|' ${K8S_MANIFESTS_DIR}/authenticationService.yaml
                     git add Kubernetes/authenticationService.yaml
                     git commit -m "Update deployment image to version ${IMAGE_TAG}"
                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main

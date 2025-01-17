@@ -21,7 +21,7 @@ spec:
         - containerPort: 8081
         env:
         - name: DB_URL
-          value: "mysql://mysql-service:3306/authdb"
+          value: "mysql://mysql-service:3306/BankDb"
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
